@@ -6,6 +6,7 @@ namespace AdvikLabs\Optimizer\Admin\Controller;
 
 use AdvikLabs\Optimizer\Admin\View\DashboardView;
 use AdvikLabs\Optimizer\Domain\Cache\Service\CacheStatsService;
+use AdvikLabs\Optimizer\Domain\Vitals\Repository\AuditRepository;
 use AdvikLabs\Optimizer\Domain\Vitals\Service\ScoreAggregatorService;
 
 class DashboardController extends AbstractController {
@@ -13,15 +14,18 @@ class DashboardController extends AbstractController {
 	private DashboardView $view;
 	private ScoreAggregatorService $scoreAggregator;
 	private CacheStatsService $cacheStatsService;
+	private AuditRepository $auditRepository;
 
 	public function __construct(
 		DashboardView $view,
 		ScoreAggregatorService $scoreAggregator,
-		CacheStatsService $cacheStatsService
+		CacheStatsService $cacheStatsService,
+		AuditRepository $auditRepository
 	) {
 		$this->view              = $view;
 		$this->scoreAggregator   = $scoreAggregator;
 		$this->cacheStatsService = $cacheStatsService;
+		$this->auditRepository   = $auditRepository;
 	}
 
 	public function index(): void {
@@ -40,6 +44,9 @@ class DashboardController extends AbstractController {
 		$desktopInpTrend = $this->scoreAggregator->trend( 'inp', '7d', 'desktop' );
 
 		$cacheStats = $this->cacheStatsService->summary();
+
+		$mobileAudits  = $this->auditRepository->getByDevice( 'mobile', 20 );
+		$desktopAudits = $this->auditRepository->getByDevice( 'desktop', 20 );
 
 		$settings  = get_option( 'advik_optimizer_settings', [] );
 		$hasApiKey = ! empty( $settings['vitals_psi_api_key'] ?? '' );
@@ -68,6 +75,7 @@ class DashboardController extends AbstractController {
 							'cls' => $mobileClsTrend,
 							'inp' => $mobileInpTrend,
 						],
+						'audits'  => $mobileAudits,
 					],
 					'desktop' => [
 						'scores'  => $desktopScores,
@@ -77,6 +85,7 @@ class DashboardController extends AbstractController {
 							'cls' => $desktopClsTrend,
 							'inp' => $desktopInpTrend,
 						],
+						'audits'  => $desktopAudits,
 					],
 				],
 				'cacheStats' => $cacheStats,

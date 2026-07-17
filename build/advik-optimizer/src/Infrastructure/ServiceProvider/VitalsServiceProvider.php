@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AdvikLabs\Optimizer\Infrastructure\ServiceProvider;
 
 use AdvikLabs\Optimizer\Container\ContainerInterface;
+use AdvikLabs\Optimizer\Domain\Vitals\Repository\AuditRepository;
 use AdvikLabs\Optimizer\Domain\Vitals\Repository\VitalsRepository;
 use AdvikLabs\Optimizer\Domain\Vitals\Support\ScoreRubric;
 use AdvikLabs\Optimizer\Domain\Vitals\Client\PsiApiClient;
@@ -13,6 +14,7 @@ use AdvikLabs\Optimizer\Domain\Vitals\Service\VitalsIngestService;
 use AdvikLabs\Optimizer\Domain\Vitals\Service\VitalsScanService;
 use AdvikLabs\Optimizer\Domain\Vitals\Service\ScoreAggregatorService;
 use AdvikLabs\Optimizer\Infrastructure\Cron\VitalsScanJob;
+use AdvikLabs\Optimizer\Rest\Controller\AuditController;
 
 class VitalsServiceProvider extends AbstractServiceProvider {
 
@@ -22,6 +24,14 @@ class VitalsServiceProvider extends AbstractServiceProvider {
 			function () {
 				global $wpdb;
 				return new VitalsRepository( $wpdb );
+			}
+		);
+
+		$container->singleton(
+			AuditRepository::class,
+			function () {
+				global $wpdb;
+				return new AuditRepository( $wpdb );
 			}
 		);
 
@@ -45,7 +55,8 @@ class VitalsServiceProvider extends AbstractServiceProvider {
 			VitalsIngestService::class,
 			function ( ContainerInterface $c ) {
 				return new VitalsIngestService(
-					$c->get( VitalsRepository::class )
+					$c->get( VitalsRepository::class ),
+					$c->get( AuditRepository::class )
 				);
 			}
 		);
@@ -75,6 +86,15 @@ class VitalsServiceProvider extends AbstractServiceProvider {
 			function ( ContainerInterface $c ) {
 				return new VitalsScanJob(
 					$c->get( VitalsScanService::class )
+				);
+			}
+		);
+
+		$container->singleton(
+			AuditController::class,
+			function ( ContainerInterface $c ) {
+				return new AuditController(
+					$c->get( AuditRepository::class )
 				);
 			}
 		);

@@ -34,6 +34,7 @@ class Activator {
 		global $wpdb;
 
 		self::upgradeCwvMetricsEnum( $wpdb );
+		self::upgradeAuditsTable( $wpdb );
 
 		update_option( self::VERSION_OPTION, ADVIK_OPTIMIZER_VERSION );
 	}
@@ -42,6 +43,35 @@ class Activator {
 	 * Ensure the metric_type ENUM on wp_advik_cwv_metrics includes
 	 * category-score values (performance, seo, accessibility, best_practices).
 	 */
+	private static function upgradeAuditsTable( $wpdb ): void {
+		$table = $wpdb->prefix . 'advik_audits';
+
+		if ( $table === $wpdb->get_var( "SHOW TABLES LIKE '{$table}'" ) ) {
+			return;
+		}
+
+		$charsetCollate = $wpdb->get_charset_collate();
+
+		$sql = "CREATE TABLE {$table} (
+            id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+            url_hash CHAR(32) NOT NULL,
+            audit_id VARCHAR(255) NOT NULL,
+            title VARCHAR(255) NOT NULL,
+            description TEXT DEFAULT NULL,
+            score TINYINT DEFAULT NULL,
+            severity VARCHAR(20) NOT NULL DEFAULT 'info',
+            category VARCHAR(50) NOT NULL,
+            estimated_savings_ms INT UNSIGNED DEFAULT 0,
+            device ENUM('mobile','desktop') NOT NULL,
+            recorded_at DATETIME NOT NULL,
+            PRIMARY KEY (id),
+            KEY idx_device (device, recorded_at)
+        ) {$charsetCollate};";
+
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		dbDelta( $sql );
+	}
+
 	private static function upgradeCwvMetricsEnum( $wpdb ): void {
 		$table = $wpdb->prefix . 'advik_cwv_metrics';
 		$row   = $wpdb->get_row( "SHOW COLUMNS FROM {$table} WHERE Field = 'metric_type'" );
@@ -125,6 +155,22 @@ class Activator {
                 dry_run TINYINT(1) NOT NULL,
                 run_at DATETIME NOT NULL,
                 PRIMARY KEY (id)
+            ) {$charsetCollate};",
+
+			"CREATE TABLE {$prefix}advik_audits (
+                id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+                url_hash CHAR(32) NOT NULL,
+                audit_id VARCHAR(255) NOT NULL,
+                title VARCHAR(255) NOT NULL,
+                description TEXT DEFAULT NULL,
+                score TINYINT DEFAULT NULL,
+                severity VARCHAR(20) NOT NULL DEFAULT 'info',
+                category VARCHAR(50) NOT NULL,
+                estimated_savings_ms INT UNSIGNED DEFAULT 0,
+                device ENUM('mobile','desktop') NOT NULL,
+                recorded_at DATETIME NOT NULL,
+                PRIMARY KEY (id),
+                KEY idx_device (device, recorded_at)
             ) {$charsetCollate};",
 		];
 

@@ -36,6 +36,7 @@
     <?php $scores = $deviceData[ $device ]['scores']; ?>
     <?php $metrics = $deviceData[ $device ]['metrics']; ?>
     <?php $trends = $deviceData[ $device ]['trends']; ?>
+    <?php $audits = $deviceData[ $device ]['audits']; ?>
     <div class="advik-device-panel<?php echo 'mobile' === $device ? ' active' : ''; ?>" data-device="<?php echo esc_attr( $device ); ?>">
         <div class="advik-section advik-score-rings-row">
             <?php foreach ( [ 'performance', 'seo', 'accessibility', 'best_practices' ] as $type ) : ?>
@@ -120,6 +121,32 @@
                 <?php endforeach; ?>
             </div>
         </div>
+
+        <?php if ( ! empty( $audits ) ) : ?>
+        <div class="advik-card advik-card-insights">
+            <h2><?php echo esc_html__( 'Actionable Insights', 'advik-optimizer' ); ?></h2>
+            <div class="advik-insight-list">
+                <?php foreach ( $audits as $audit ) : ?>
+                <?php $sev = $audit->getSeverity(); ?>
+                <div class="advik-insight-item advik-insight-<?php echo esc_attr( $sev ); ?>">
+                    <span class="advik-insight-icon">
+                        <?php if ( 'error' === $sev ) : ?>&#x2716;<?php elseif ( 'warning' === $sev ) : ?>&#x26A0;<?php else : ?>&#x2139;<?php endif; ?>
+                    </span>
+                    <div class="advik-insight-body">
+                        <span class="advik-insight-title"><?php echo esc_html( $audit->getTitle() ); ?></span>
+                        <span class="advik-insight-desc"><?php echo esc_html( $audit->getDescription() ); ?></span>
+                    </div>
+                    <div class="advik-insight-meta">
+                        <?php if ( $audit->getEstimatedSavingsFormatted() ) : ?>
+                            <span class="advik-insight-savings"><?php echo esc_html( $audit->getEstimatedSavingsFormatted() ); ?></span>
+                        <?php endif; ?>
+                        <span class="advik-insight-category advik-category-<?php echo esc_attr( $audit->getCategory() ); ?>"><?php echo esc_html( ucfirst( $audit->getCategory() ) ); ?></span>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php endif; ?>
     </div>
     <?php endforeach; ?>
 

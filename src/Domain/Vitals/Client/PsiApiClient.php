@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AdvikLabs\Optimizer\Domain\Vitals\Client;
 
 use AdvikLabs\Optimizer\Domain\Vitals\Contract\LighthouseClientInterface;
+use AdvikLabs\Optimizer\Domain\Vitals\Model\LabAudit;
 use AdvikLabs\Optimizer\Domain\Vitals\Model\LabResult;
 
 class PsiApiClient implements LighthouseClientInterface {
@@ -69,6 +70,8 @@ class PsiApiClient implements LighthouseClientInterface {
 		$a11y = isset( $lhc['accessibility']['score'] ) ? (int) round( $lhc['accessibility']['score'] * 100 ) : 0;
 		$bp   = isset( $lhc['best-practices']['score'] ) ? (int) round( $lhc['best-practices']['score'] * 100 ) : 0;
 
+		$audits = self::parseAudits( $lighthouse, $device );
+
 		return new LabResult(
 			$url,
 			$lcp,
@@ -79,11 +82,77 @@ class PsiApiClient implements LighthouseClientInterface {
 			$seo,
 			$a11y,
 			$bp,
-			$device
+			$device,
+			null,
+			$audits
 		);
 	}
 
 	private function emptyResult( string $url, string $device ): LabResult {
 		return new LabResult( $url, 0, 0, 0, 0, 0, 0, 0, 0, $device );
+	}
+
+	private static function parseAudits( array $lighthouse, string $device ): array {
+		$audits    = $lighthouse['audits'] ?? [];
+		$categories = $lighthouse['categories'] ?? [];
+
+		$catMap = [];
+		foreach ( $categories as $catId => $category ) {
+			foreach ( $category['auditRefs'] ?? [] as $ref ) {
+				$catMap[ $ref['id'] ] = $catId;
+			}
+		}
+
+		$results = [];
+		foreach ( $audits as $auditId => $audit ) {
+			if ( ! isset( $audit['score'] ) ) {
+				continue;
+			}
+
+			if ( 0 !== $audit['score'] && ( ! isset( $audit['details']['type'] ) || 'opportunity' !== $audit['details']['type'] ) ) {
+				continue;
+			}
+
+			$category = $catMap[ $auditId ] ?? 'performance';
+			$savings  = isset( $audit['details']['overallSavingsMs'] ) ? (int) $audit['details']['overallSavingsMs'] : 0;
+
+			$severity = 'info';
+			if ( 0 === $audit['score'] ) {
+				$severity = 'error';
+			} elseif ( $savings > 500 ) {
+				$severity = 'error';
+			} elseif ( $savings > 100 ) {
+				$severity = 'warning';
+			}
+
+			$results[] = new LabAudit(
+				null,
+				$auditId,
+				$audit['title'] ?? $auditId,
+				wp_strip_all_tags( $audit['description'] ?? '' ),
+				(float) $audit['score'],
+				$severity,
+				$category,
+				$savings,
+				$device
+			);
+		}
+
+		usort(
+			$results,
+			function ( LabAudit $a, LabAudit $b ) {
+				if ( $a->getSeverity() !== $b->getSeverity() ) {
+					$order = [
+						'error' => 0,
+						'warning' => 1,
+						'info' => 2,
+					];
+					return ( $order[ $a->getSeverity() ] ?? 3 ) - ( $order[ $b->getSeverity() ] ?? 3 );
+				}
+				return ( $b->getEstimatedSavingsMs() ?? 0 ) - ( $a->getEstimatedSavingsMs() ?? 0 );
+			}
+		);
+
+		return array_slice( $results, 0, 20 );
 	}
 }

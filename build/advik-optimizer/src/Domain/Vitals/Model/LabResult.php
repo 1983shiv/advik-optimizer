@@ -17,6 +17,7 @@ class LabResult {
 	private int $bestPracticesScore;
 	private string $device;
 	private string $recordedAt;
+	private array $audits;
 
 	public function __construct(
 		string $url,
@@ -29,7 +30,8 @@ class LabResult {
 		int $accessibilityScore,
 		int $bestPracticesScore,
 		string $device = 'mobile',
-		?string $recordedAt = null
+		?string $recordedAt = null,
+		array $audits = []
 	) {
 		$this->url                 = $url;
 		$this->lcp                 = $lcp;
@@ -42,6 +44,7 @@ class LabResult {
 		$this->bestPracticesScore  = $bestPracticesScore;
 		$this->device              = $device;
 		$this->recordedAt          = $recordedAt ?? current_time( 'mysql' );
+		$this->audits              = $audits;
 	}
 
 	public function getUrl(): string {
@@ -86,6 +89,10 @@ class LabResult {
 
 	public function getRecordedAt(): string {
 		return $this->recordedAt;
+	}
+
+	public function getAudits(): array {
+		return $this->audits;
 	}
 
 	public function isEmpty(): bool {

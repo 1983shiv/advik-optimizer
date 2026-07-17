@@ -5,11 +5,17 @@ declare(strict_types=1);
 namespace AdvikLabs\Optimizer\Tests\Unit\Domain\Vitals\Service;
 
 use AdvikLabs\Optimizer\Domain\Vitals\Model\LabResult;
+use AdvikLabs\Optimizer\Domain\Vitals\Repository\AuditRepository;
 use AdvikLabs\Optimizer\Domain\Vitals\Repository\VitalsRepository;
 use AdvikLabs\Optimizer\Domain\Vitals\Service\VitalsIngestService;
 use PHPUnit\Framework\TestCase;
 
 class TestVitalsIngestService extends TestCase {
+
+	private function createService( $vitalsRepo ): VitalsIngestService {
+		$auditRepo = $this->createMock( AuditRepository::class );
+		return new VitalsIngestService( $vitalsRepo, $auditRepo );
+	}
 
 	public function testIngestLabDataStoresMetrics(): void {
 		$repository = $this->createMock( VitalsRepository::class );
@@ -19,7 +25,7 @@ class TestVitalsIngestService extends TestCase {
 
 		$labResult = new LabResult( 'https://example.com', 1.5, 0.05, 100, 300, 95, 90, 85, 80, 'mobile' );
 
-		$service = new VitalsIngestService( $repository );
+		$service = $this->createService( $repository );
 		$service->ingestLabData( $labResult );
 	}
 
@@ -38,7 +44,7 @@ class TestVitalsIngestService extends TestCase {
 			'device' => 'mobile',
 		];
 
-		$service = new VitalsIngestService( $repository );
+		$service = $this->createService( $repository );
 		$service->ingestFieldData( $payload );
 	}
 
@@ -54,7 +60,7 @@ class TestVitalsIngestService extends TestCase {
 			'cls' => 0.05,
 		];
 
-		$service = new VitalsIngestService( $repository );
+		$service = $this->createService( $repository );
 		$service->ingestFieldData( $payload );
 	}
 
@@ -68,7 +74,7 @@ class TestVitalsIngestService extends TestCase {
 			'lcp' => 1.5,
 		];
 
-		$service = new VitalsIngestService( $repository );
+		$service = $this->createService( $repository );
 		$service->ingestFieldData( $payload );
 	}
 
@@ -81,7 +87,7 @@ class TestVitalsIngestService extends TestCase {
 			'url' => 'https://example.com',
 		];
 
-		$service = new VitalsIngestService( $repository );
+		$service = $this->createService( $repository );
 		$service->ingestFieldData( $payload );
 	}
 }

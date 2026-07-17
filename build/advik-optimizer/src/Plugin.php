@@ -19,6 +19,7 @@ use AdvikLabs\Optimizer\Infrastructure\ServiceProvider\CacheServiceProvider;
 use AdvikLabs\Optimizer\Infrastructure\ServiceProvider\VitalsServiceProvider;
 use AdvikLabs\Optimizer\Infrastructure\Cron\VitalsScanJob;
 use AdvikLabs\Optimizer\Rest\RestKernel;
+use AdvikLabs\Optimizer\Rest\Controller\AuditController;
 use AdvikLabs\Optimizer\Rest\Controller\CacheController;
 use AdvikLabs\Optimizer\Rest\Controller\ScoreController;
 use AdvikLabs\Optimizer\Rest\Controller\VitalsController;
@@ -212,7 +213,8 @@ class Plugin {
 				return new DashboardController(
 					$c->get( DashboardView::class ),
 					$c->get( \AdvikLabs\Optimizer\Domain\Vitals\Service\ScoreAggregatorService::class ),
-					$c->get( \AdvikLabs\Optimizer\Domain\Cache\Service\CacheStatsService::class )
+					$c->get( \AdvikLabs\Optimizer\Domain\Cache\Service\CacheStatsService::class ),
+					$c->get( \AdvikLabs\Optimizer\Domain\Vitals\Repository\AuditRepository::class )
 				);
 			}
 		);
@@ -261,6 +263,7 @@ class Plugin {
 			RestKernel::class,
 			function ( ContainerInterface $c ) {
 				return new RestKernel(
+					$c->get( AuditController::class ),
 					$c->get( CacheController::class ),
 					$c->get( ScoreController::class ),
 					$c->get( VitalsController::class )

@@ -6,14 +6,17 @@ namespace AdvikLabs\Optimizer\Domain\Vitals\Service;
 
 use AdvikLabs\Optimizer\Domain\Vitals\Model\LabResult;
 use AdvikLabs\Optimizer\Domain\Vitals\Model\VitalMetric;
+use AdvikLabs\Optimizer\Domain\Vitals\Repository\AuditRepository;
 use AdvikLabs\Optimizer\Domain\Vitals\Repository\VitalsRepository;
 
 class VitalsIngestService {
 
 	private VitalsRepository $repository;
+	private AuditRepository $auditRepository;
 
-	public function __construct( VitalsRepository $repository ) {
-		$this->repository = $repository;
+	public function __construct( VitalsRepository $repository, AuditRepository $auditRepository ) {
+		$this->repository       = $repository;
+		$this->auditRepository  = $auditRepository;
 	}
 
 	public function ingestLabData( LabResult $labResult ): void {
@@ -22,6 +25,7 @@ class VitalsIngestService {
 		}
 		$metrics = $labResult->toMetrics();
 		$this->repository->storeBatch( $metrics );
+		$this->auditRepository->storeBatch( $labResult->getAudits(), $labResult->getDevice() );
 	}
 
 	public function ingestFieldData( array $payload ): void {

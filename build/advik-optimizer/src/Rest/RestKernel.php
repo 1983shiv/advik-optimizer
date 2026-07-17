@@ -4,21 +4,25 @@ declare(strict_types=1);
 
 namespace AdvikLabs\Optimizer\Rest;
 
+use AdvikLabs\Optimizer\Rest\Controller\AuditController;
 use AdvikLabs\Optimizer\Rest\Controller\CacheController;
 use AdvikLabs\Optimizer\Rest\Controller\ScoreController;
 use AdvikLabs\Optimizer\Rest\Controller\VitalsController;
 
 class RestKernel {
 
+	private AuditController $auditController;
 	private CacheController $cacheController;
 	private ScoreController $scoreController;
 	private VitalsController $vitalsController;
 
 	public function __construct(
+		AuditController $auditController,
 		CacheController $cacheController,
 		ScoreController $scoreController,
 		VitalsController $vitalsController
 	) {
+		$this->auditController  = $auditController;
 		$this->cacheController  = $cacheController;
 		$this->scoreController  = $scoreController;
 		$this->vitalsController = $vitalsController;
@@ -67,6 +71,22 @@ class RestKernel {
 				'methods'             => 'GET',
 				'callback'            => [ $this->cacheController, 'stats' ],
 				'permission_callback' => [ $this->cacheController, 'permissionCheck' ],
+			]
+		);
+
+		register_rest_route(
+			'advik-optimizer/v1',
+			'/audits',
+			[
+				'methods'             => 'GET',
+				'callback'            => [ $this->auditController, 'index' ],
+				'permission_callback' => [ $this->auditController, 'permissionCheck' ],
+				'args'                => [
+					'device' => [
+						'type' => 'string',
+						'enum' => [ 'mobile', 'desktop' ],
+					],
+				],
 			]
 		);
 
