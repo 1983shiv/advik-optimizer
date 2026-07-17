@@ -1,0 +1,408 @@
+.advik-optimizer-settings .advik-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid #E3E8E6;
+    margin: 0 0 24px;
+    padding: 0;
+}
+
+.advik-optimizer-settings .advik-tab {
+    display: inline-block;
+    padding: 12px 20px;
+    text-decoration: none;
+    color: #5B6570;
+    font-size: 14px;
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+}
+
+.advik-optimizer-settings .advik-tab.active,
+.advik-optimizer-settings .advik-tab:hover {
+    color: #1FCB8E;
+    border-bottom-color: #1FCB8E;
+}
+
+.advik-optimizer-settings .advik-tab-disabled {
+    display: inline-block;
+    padding: 12px 20px;
+    color: #C0C8C4;
+    font-size: 14px;
+    cursor: not-allowed;
+}
+
+.advik-optimizer-settings .advik-section {
+    margin-bottom: 32px;
+    padding: 0;
+}
+
+.advik-optimizer-settings .advik-section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #12161B;
+    margin: 0 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #E3E8E6;
+}
+
+.advik-optimizer-settings .advik-field {
+    margin-bottom: 20px;
+}
+
+.advik-optimizer-settings .advik-field-help {
+    font-size: 12px;
+    color: #9BA5AC;
+    margin: 4px 0 0;
+}
+
+.advik-optimizer-settings .advik-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.advik-optimizer-settings .advik-toggle input[type="checkbox"] {
+    display: none;
+}
+
+.advik-optimizer-settings .advik-toggle-track {
+    width: 36px;
+    height: 20px;
+    background: #E3E8E6;
+    border-radius: 999px;
+    position: relative;
+    transition: background 0.2s;
+}
+
+.advik-optimizer-settings .advik-toggle input:checked + .advik-toggle-track {
+    background: #1FCB8E;
+}
+
+.advik-optimizer-settings .advik-toggle-track::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.2s;
+}
+
+.advik-optimizer-settings .advik-toggle input:checked + .advik-toggle-track::after {
+    transform: translateX(16px);
+}
+
+.advik-optimizer-settings .advik-toggle-label {
+    font-size: 14px;
+    color: #12161B;
+}
+
+.advik-optimizer-settings .advik-textarea {
+    width: 100%;
+    max-width: 480px;
+    border: 1px solid #E3E8E6;
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 14px;
+    color: #12161B;
+    resize: vertical;
+}
+
+.advik-optimizer-settings .advik-text-input {
+    width: 100%;
+    max-width: 480px;
+    border: 1px solid #E3E8E6;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #12161B;
+}
+
+.advik-optimizer-settings .advik-input-sm {
+    max-width: 160px;
+}
+
+.advik-optimizer-settings .advik-range-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.advik-optimizer-settings .advik-range {
+    flex: 1;
+    max-width: 320px;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    background: #E3E8E6;
+    border-radius: 3px;
+    outline: none;
+}
+
+.advik-optimizer-settings .advik-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #1FCB8E;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.advik-optimizer-settings .advik-range-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: #12161B;
+    font-variant-numeric: tabular-nums;
+    min-width: 40px;
+}
+
+.advik-optimizer-settings .advik-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.advik-dashboard .advik-dashboard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.advik-dashboard .advik-dashboard-header-left {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+}
+
+.advik-dashboard .advik-dashboard-header-left h1 {
+    margin: 0;
+}
+
+.advik-dashboard .advik-status-line {
+    font-size: 14px;
+    color: #5B6570;
+}
+
+.advik-dashboard .advik-badge-live {
+    display: inline-block;
+    padding: 2px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background: #E4F9F1;
+    color: #17A876;
+    border-radius: 999px;
+}
+
+.advik-dashboard .advik-section {
+    margin-bottom: 24px;
+}
+
+.advik-dashboard .advik-score-rings-row {
+    display: flex;
+    gap: 24px;
+    justify-content: space-between;
+}
+
+.advik-dashboard .advik-score-ring {
+    flex: 1;
+    text-align: center;
+}
+
+.advik-dashboard .advik-score-ring-visual {
+    position: relative;
+    width: 96px;
+    height: 96px;
+    margin: 0 auto 8px;
+}
+
+.advik-dashboard .advik-ring-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    line-height: 1.15;
+    font-variant-numeric: tabular-nums;
+    color: #12161B;
+}
+
+.advik-dashboard .advik-ring-value-skeleton {
+    color: #C0C8C4;
+}
+
+.advik-dashboard .advik-ring-label {
+    display: block;
+    font-size: 12px;
+    line-height: 1.4;
+    color: #5B6570;
+    text-align: center;
+}
+
+.advik-dashboard .advik-ring-fill {
+    transition: stroke-dashoffset 0.6s ease-out;
+}
+
+.advik-dashboard .advik-card {
+    background: #fff;
+    border: 1px solid #E3E8E6;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 1px 2px rgba(18,22,27,0.04), 0 1px 8px rgba(18,22,27,0.04);
+    margin-bottom: 24px;
+}
+
+.advik-dashboard .advik-card-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.advik-dashboard .advik-card-header h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #12161B;
+    margin: 0;
+}
+
+.advik-dashboard .advik-card-stat {
+    font-size: 14px;
+    color: #5B6570;
+    font-variant-numeric: tabular-nums;
+}
+
+.advik-dashboard .advik-card h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #12161B;
+    margin: 0 0 16px;
+}
+
+.advik-dashboard .advik-metric-deltas {
+    display: flex;
+    gap: 24px;
+}
+
+.advik-dashboard .advik-metric-delta {
+    flex: 1;
+    padding: 16px;
+    background: #F6F8F7;
+    border-radius: 10px;
+}
+
+.advik-dashboard .advik-metric-delta-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.advik-dashboard .advik-metric-delta-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #5B6570;
+}
+
+.advik-dashboard .advik-metric-delta-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 999px;
+}
+
+.advik-dashboard .advik-metric-delta-badge.good {
+    background: #E4F9F1;
+    color: #17A876;
+}
+
+.advik-dashboard .advik-metric-delta-badge.warning {
+    background: #FDF2DE;
+    color: #F5A524;
+}
+
+.advik-dashboard .advik-metric-delta-badge.poor {
+    background: #FDECEC;
+    color: #EF4444;
+}
+
+.advik-dashboard .advik-metric-delta-value {
+    display: block;
+    font-size: 32px;
+    line-height: 1.15;
+    font-variant-numeric: tabular-nums;
+    color: #12161B;
+    margin-bottom: 8px;
+}
+
+.advik-dashboard .advik-sparkline {
+    margin-top: 8px;
+}
+
+.advik-dashboard .advik-sparkline svg {
+    display: block;
+}
+
+.advik-dashboard .advik-stat-tiles {
+    display: flex;
+    gap: 24px;
+}
+
+.advik-dashboard .advik-stat-tile {
+    flex: 1;
+}
+
+.advik-dashboard .advik-stat-tile-empty {
+    opacity: 0.4;
+}
+
+.advik-dashboard .advik-stat-value {
+    display: block;
+    font-size: 32px;
+    line-height: 1.15;
+    font-variant-numeric: tabular-nums;
+    color: #12161B;
+}
+
+.advik-dashboard .advik-stat-label {
+    display: block;
+    font-size: 12px;
+    line-height: 1.4;
+    color: #5B6570;
+    margin-top: 4px;
+}
+
+.advik-dashboard .advik-workload-strip {
+    padding: 16px 20px;
+    background: #F6F8F7;
+    border: 1px solid #E3E8E6;
+    border-radius: 10px;
+    margin-top: 8px;
+}
+
+.advik-dashboard .advik-workload-strip h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #5B6570;
+    margin: 0 0 12px;
+}
+
+.advik-dashboard .advik-workload-chip {
+    display: inline-block;
+    padding: 4px 12px;
+    margin: 0 8px 8px 0;
+    font-size: 12px;
+    color: #5B6570;
+    background: #fff;
+    border: 1px solid #E3E8E6;
+    border-radius: 999px;
+}

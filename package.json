@@ -1,0 +1,14 @@
+{
+  "name": "advik-optimizer-assets",
+  "scripts": {
+    "dev": "vite build --watch",
+    "zip": "node build.js",
+    "env": "wp-env start",
+    "env:stop": "wp-env stop"
+  },
+  "devDependencies": {
+    "@wordpress/env": "^10.0.0",
+    "archiver": "^8.0.0",
+    "vite": "^8.1.5"
+  }
+}

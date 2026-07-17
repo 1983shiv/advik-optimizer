@@ -1,0 +1,7 @@
+vendor/
+node_modules/
+assets/admin/dist/
+.DS_Store
+*.log
+.env.testing
+.phpunit.result.cache

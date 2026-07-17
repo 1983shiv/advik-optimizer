@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<ruleset name="AdvikOptimizer">
+  <description>Advik Optimizer coding standards — WPCS + PSR-12 hybrid.</description>
+
+  <rule ref="WordPress-Extra"/>
+
+  <config name="minimum_supported_wp_version" value="6.0"/>
+  <config name="testVersion" value="8.0-"/>
+  <rule ref="PHPCompatibilityWP"/>
+
+  <arg name="basepath" value="."/>
+  <arg value="nps"/>
+
+  <file>src</file>
+  <file>advik-optimizer.php</file>
+  <file>uninstall.php</file>
+
+  <exclude-pattern>vendor/*</exclude-pattern>
+  <exclude-pattern>node_modules/*</exclude-pattern>
+
+  <!-- PSR-4 requires ClassName.php, not class-class-name.php -->
+  <rule ref="WordPress.Files.FileName">
+    <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+    <exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+  </rule>
+
+  <!-- PSR-12 uses camelCase for methods/variables; WPCS expects snake_case -->
+  <rule ref="WordPress.NamingConventions.ValidFunctionName">
+    <exclude name="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid"/>
+  </rule>
+  <rule ref="WordPress.NamingConventions.ValidVariableName">
+    <exclude name="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase"/>
+    <exclude name="WordPress.NamingConventions.ValidVariableName.InterpolatedVariableNotSnakeCase"/>
+    <exclude name="WordPress.NamingConventions.ValidVariableName.PropertyNotSnakeCase"/>
+    <exclude name="WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase"/>
+  </rule>
+
+
+  <!-- $abstract is a common parameter name in DI containers -->
+  <rule ref="Universal.NamingConventions.NoReservedKeywordParameterNames">
+    <exclude name="Universal.NamingConventions.NoReservedKeywordParameterNames.abstractFound"/>
+  </rule>
+
+  <!-- RuntimeException messages don't need escaping -->
+  <rule ref="WordPress.Security.EscapeOutput">
+    <exclude name="WordPress.Security.EscapeOutput.ExceptionNotEscaped"/>
+  </rule>
+
+  <!-- Allow short array syntax (PSR-12) -->
+  <rule ref="Universal.Arrays.DisallowShortArraySyntax">
+    <severity>0</severity>
+  </rule>
+
+  <!-- $array/$default are common in helper utilities -->
+  <rule ref="Universal.NamingConventions.NoReservedKeywordParameterNames">
+    <exclude name="Universal.NamingConventions.NoReservedKeywordParameterNames.arrayFound"/>
+    <exclude name="Universal.NamingConventions.NoReservedKeywordParameterNames.defaultFound"/>
+  </rule>
+
+  <!-- manage_advik_optimizer is a custom capability registered by the plugin -->
+  <rule ref="WordPress.WP.Capabilities">
+    <exclude name="WordPress.WP.Capabilities.Unknown"/>
+  </rule>
+
+  <!-- DB table name interpolation: $this->table is a safe property, not user input -->
+  <rule ref="WordPress.DB.PreparedSQL">
+    <exclude name="WordPress.DB.PreparedSQL.InterpolatedNotPrepared"/>
+    <exclude name="WordPress.DB.PreparedSQL.NotPrepared"/>
+  </rule>
+
+  <!-- Cached HTML output must NOT be escaped (it's pre-rendered full HTML) -->
+  <rule ref="WordPress.Security.EscapeOutput">
+    <exclude name="WordPress.Security.EscapeOutput.OutputNotEscaped"/>
+  </rule>
+
+  <!-- File cache store uses local file operations intentionally -->
+  <rule ref="WordPress.WP.AlternativeFunctions">
+    <exclude name="WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents"/>
+    <exclude name="WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents"/>
+  </rule>
+</ruleset>
