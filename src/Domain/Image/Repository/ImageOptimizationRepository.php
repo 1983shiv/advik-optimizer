@@ -136,7 +136,7 @@ class ImageOptimizationRepository {
 
 	public function getTotalSavings(): int {
 		$table = $this->table;
-		$sql   = "SELECT COALESCE(SUM(original_size - optimized_size), 0) FROM {$table} WHERE status = 'done' AND optimized_size IS NOT NULL";
+		$sql   = "SELECT COALESCE(SUM(GREATEST(0, CAST(original_size AS SIGNED) - CAST(optimized_size AS SIGNED))), 0) FROM {$table} WHERE status = 'done' AND optimized_size IS NOT NULL";
 
 		return (int) $this->wpdb->get_var( $sql );
 	}
