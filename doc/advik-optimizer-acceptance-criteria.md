@@ -16,17 +16,17 @@
 ---
 
 ## Phase 0 — Scaffolding
-- [ ] `wp plugin activate advik-optimizer` succeeds with no PHP notices/warnings/deprecations.
-- [ ] All 5 custom tables exist post-activation with correct schema (verified against TSD §2.6.2).
-- [ ] Deactivating does not drop tables/options; uninstalling (via `uninstall.php`) does, unless "keep data" is set.
-- [ ] Container resolves at least one bound interface→implementation pair (proves DI wiring works end to end).
+- [x] `wp plugin activate advik-optimizer` succeeds with no PHP notices/warnings/deprecations.
+- [x] All 5 custom tables exist post-activation with correct schema (verified against TSD §2.6.2).
+- [x] Deactivating does not drop tables/options; uninstalling (via `uninstall.php`) does, unless "keep data" is set.
+- [x] Container resolves at least one bound interface→implementation pair (proves DI wiring works end to end).
 
 ## Phase 1 — Cache
 - FR-1.1: A logged-out GET request to a cacheable URL returns a response served from `FileCacheStore`, verifiable via a debug header (`X-Advik-Cache: HIT`). Second request to same URL after edit shows `MISS` then `HIT`.
 - FR-1.3: Publishing/updating a post purges exactly the URLs related to that post (permalink, taxonomy archives it belongs to, front page if configured) — verified by cache log entries, not a full-site flush, unless scope=all requested.
 - FR-1.4: A logged-in user, a WooCommerce cart page, and any URL matching a configured exclusion pattern never return `HIT`.
 - FR-1.5: Warm job populates cache for all sitemap URLs within the configured cron window; failures are logged, not silent.
-- [ ] REST, UI, and WP-CLI purge/warm actions produce identical results (same purge scope logic reused, not reimplemented three times — DRY check).
+- [x] REST, UI, and WP-CLI purge/warm actions produce identical results (same purge scope logic reused, not reimplemented three times — DRY check).
 
 ## Phase 2 — Dashboard / Vitals
 - FR-4.1: Dashboard renders all 4 score rings from real aggregated data within 2s on a cache-warm admin page load.

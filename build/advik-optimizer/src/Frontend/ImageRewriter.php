@@ -15,7 +15,7 @@ class ImageRewriter {
 		add_filter( 'the_content', [ $this, 'injectPictureTags' ], 100 );
 	}
 
-	public function filterImageAttributes( array $attr, \WP_Post $attachment, string $size ): array {
+	public function filterImageAttributes( array $attr, \WP_Post $attachment, $size ): array {
 		$settings = get_option( 'advik_optimizer_settings', [] );
 
 		if ( empty( $settings['module_images'] ) ) {
