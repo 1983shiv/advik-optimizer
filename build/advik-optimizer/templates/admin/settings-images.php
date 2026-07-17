@@ -40,6 +40,14 @@
     </div>
 
     <div class="advik-section">
+        <div class="advik-actions">
+            <button type="submit" class="button button-primary">
+                <?php echo esc_html__( 'Save Settings', 'advik-optimizer' ); ?>
+            </button>
+        </div>
+    </div>
+
+    <div class="advik-section">
         <h2 class="advik-section-title"><?php echo esc_html__( 'Media Library', 'advik-optimizer' ); ?></h2>
         <div class="advik-actions" style="margin-bottom:20px;">
             <a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=advik_optimizer_bulk_optimize' ), 'advik_optimizer_bulk_optimize' ) ); ?>" class="button button-primary" id="advik-bulk-optimize-btn">
