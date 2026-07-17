@@ -17,6 +17,7 @@ use AdvikLabs\Optimizer\Hook\Listener\ServeCacheListener;
 use AdvikLabs\Optimizer\Hook\Listener\ContentChangeListener;
 use AdvikLabs\Optimizer\Infrastructure\ServiceProvider\CacheServiceProvider;
 use AdvikLabs\Optimizer\Infrastructure\ServiceProvider\VitalsServiceProvider;
+use AdvikLabs\Optimizer\Infrastructure\ServiceProvider\ImageServiceProvider;
 use AdvikLabs\Optimizer\Infrastructure\Cron\VitalsScanJob;
 use AdvikLabs\Optimizer\Rest\RestKernel;
 use AdvikLabs\Optimizer\Rest\Controller\AuditController;
@@ -25,6 +26,11 @@ use AdvikLabs\Optimizer\Rest\Controller\ScoreController;
 use AdvikLabs\Optimizer\Rest\Controller\VitalsController;
 use AdvikLabs\Optimizer\Install\Activator;
 use AdvikLabs\Optimizer\Support\SettingsRegistry;
+use AdvikLabs\Optimizer\Domain\Image\Service\ImageSavingsService;
+use AdvikLabs\Optimizer\Domain\Image\Service\ImageQueueService;
+use AdvikLabs\Optimizer\Domain\Image\Service\ImageRestoreService;
+use AdvikLabs\Optimizer\Frontend\ImageRewriter;
+use AdvikLabs\Optimizer\Admin\Controller\ImageController;
 
 class Plugin {
 
@@ -188,6 +194,41 @@ class Plugin {
 					]
 				);
 
+				$registry->addField(
+					'module_images',
+					[
+						'type'     => 'checkbox',
+						'default'  => true,
+						'sanitize' => fn ( $v ) => filter_var( $v, FILTER_VALIDATE_BOOLEAN ),
+						'label'    => __( 'Enable image optimization', 'advik-optimizer' ),
+					]
+				);
+				$registry->addField(
+					'image_quality',
+					[
+						'type'    => 'number',
+						'default' => 82,
+						'label'   => __( 'Image compression quality', 'advik-optimizer' ),
+					]
+				);
+				$registry->addField(
+					'image_format',
+					[
+						'type'    => 'text',
+						'default' => 'webp',
+						'label'   => __( 'Image output format', 'advik-optimizer' ),
+					]
+				);
+				$registry->addField(
+					'image_lazy_loading',
+					[
+						'type'     => 'checkbox',
+						'default'  => true,
+						'sanitize' => fn ( $v ) => filter_var( $v, FILTER_VALIDATE_BOOLEAN ),
+						'label'    => __( 'Enable lazy loading', 'advik-optimizer' ),
+					]
+				);
+
 				return $registry;
 			}
 		);
@@ -212,6 +253,7 @@ class Plugin {
 	private function registerServiceProviders(): void {
 		( new CacheServiceProvider() )->register( $this->container );
 		( new VitalsServiceProvider() )->register( $this->container );
+		( new ImageServiceProvider() )->register( $this->container );
 	}
 
 	private function registerControllers(): void {
@@ -222,7 +264,8 @@ class Plugin {
 					$c->get( DashboardView::class ),
 					$c->get( \AdvikLabs\Optimizer\Domain\Vitals\Service\ScoreAggregatorService::class ),
 					$c->get( \AdvikLabs\Optimizer\Domain\Cache\Service\CacheStatsService::class ),
-					$c->get( \AdvikLabs\Optimizer\Domain\Vitals\Repository\AuditRepository::class )
+					$c->get( \AdvikLabs\Optimizer\Domain\Vitals\Repository\AuditRepository::class ),
+					$c->get( ImageSavingsService::class )
 				);
 			}
 		);
@@ -233,7 +276,8 @@ class Plugin {
 				return new SettingsController(
 					$c->get( SettingsRegistry::class ),
 					$c->get( SettingsView::class ),
-					$c->get( \AdvikLabs\Optimizer\Domain\Cache\Service\CachePurgeService::class )
+					$c->get( \AdvikLabs\Optimizer\Domain\Cache\Service\CachePurgeService::class ),
+					$c->get( \AdvikLabs\Optimizer\Domain\Image\Repository\ImageOptimizationRepository::class )
 				);
 			}
 		);
@@ -263,6 +307,17 @@ class Plugin {
 				return new VitalsController(
 					$c->get( \AdvikLabs\Optimizer\Domain\Vitals\Service\ScoreAggregatorService::class ),
 					$c->get( \AdvikLabs\Optimizer\Domain\Vitals\Service\VitalsIngestService::class )
+				);
+			}
+		);
+
+		$this->container->singleton(
+			ImageController::class,
+			function ( ContainerInterface $c ) {
+				return new ImageController(
+					$c->get( ImageQueueService::class ),
+					$c->get( ImageRestoreService::class ),
+					$c->get( \AdvikLabs\Optimizer\Domain\Image\Repository\ImageOptimizationRepository::class )
 				);
 			}
 		);
@@ -376,6 +431,51 @@ class Plugin {
 						'restUrl' => rest_url(),
 					]
 				);
+			}
+		);
+
+		add_action(
+			'wp_generate_attachment_metadata',
+			function ( array $metadata, int $attachmentId ) {
+				$settings = get_option( 'advik_optimizer_settings', [] );
+				if ( empty( $settings['module_images'] ) ) {
+					return $metadata;
+				}
+
+				$mimeType = get_post_mime_type( $attachmentId );
+				if ( false === $mimeType || ! in_array( $mimeType, [ 'image/jpeg', 'image/png', 'image/gif' ], true ) ) {
+					return $metadata;
+				}
+
+				$this->container->get( ImageQueueService::class )->enqueue( $attachmentId );
+
+				return $metadata;
+			},
+			10,
+			2
+		);
+
+		add_action(
+			'admin_post_advik_optimizer_bulk_optimize',
+			function () {
+				$this->container->get( ImageController::class )->bulkOptimize();
+			}
+		);
+
+		add_action(
+			'admin_post_advik_optimizer_restore_image',
+			function () {
+				$this->container->get( ImageController::class )->restore();
+			}
+		);
+
+		add_action(
+			'init',
+			function () {
+				$settings = get_option( 'advik_optimizer_settings', [] );
+				if ( ! empty( $settings['module_images'] ) ) {
+					$this->container->get( ImageRewriter::class )->registerHooks();
+				}
 			}
 		);
 	}

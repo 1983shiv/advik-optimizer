@@ -8,6 +8,7 @@ use AdvikLabs\Optimizer\Admin\View\DashboardView;
 use AdvikLabs\Optimizer\Domain\Cache\Service\CacheStatsService;
 use AdvikLabs\Optimizer\Domain\Vitals\Repository\AuditRepository;
 use AdvikLabs\Optimizer\Domain\Vitals\Service\ScoreAggregatorService;
+use AdvikLabs\Optimizer\Domain\Image\Service\ImageSavingsService;
 
 class DashboardController extends AbstractController {
 
@@ -15,17 +16,20 @@ class DashboardController extends AbstractController {
 	private ScoreAggregatorService $scoreAggregator;
 	private CacheStatsService $cacheStatsService;
 	private AuditRepository $auditRepository;
+	private ImageSavingsService $imageSavingsService;
 
 	public function __construct(
 		DashboardView $view,
 		ScoreAggregatorService $scoreAggregator,
 		CacheStatsService $cacheStatsService,
-		AuditRepository $auditRepository
+		AuditRepository $auditRepository,
+		ImageSavingsService $imageSavingsService
 	) {
-		$this->view              = $view;
-		$this->scoreAggregator   = $scoreAggregator;
-		$this->cacheStatsService = $cacheStatsService;
-		$this->auditRepository   = $auditRepository;
+		$this->view                = $view;
+		$this->scoreAggregator     = $scoreAggregator;
+		$this->cacheStatsService   = $cacheStatsService;
+		$this->auditRepository     = $auditRepository;
+		$this->imageSavingsService = $imageSavingsService;
 	}
 
 	public function index(): void {
@@ -51,6 +55,7 @@ class DashboardController extends AbstractController {
 		}
 
 		$cacheStats = $this->cacheStatsService->summary();
+		$imageStats = $this->imageSavingsService->summary();
 
 		$settings  = get_option( 'advik_optimizer_settings', [] );
 		$hasApiKey = ! empty( $settings['vitals_psi_api_key'] ?? '' );
@@ -73,6 +78,7 @@ class DashboardController extends AbstractController {
 			[
 				'deviceData' => $deviceData,
 				'cacheStats' => $cacheStats,
+				'imageStats' => $imageStats,
 				'notice'     => $notice,
 				'hasApiKey'  => $hasApiKey,
 			]
