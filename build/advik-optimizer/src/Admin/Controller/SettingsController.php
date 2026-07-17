@@ -98,7 +98,7 @@ class SettingsController extends AbstractController {
 		wp_safe_redirect(
 			add_query_arg(
 				[
-					'page'  => 'advik-optimizer',
+					'page'  => 'advik-optimizer-settings',
 					'tab'   => $tab,
 					'saved' => '1',
 				],
