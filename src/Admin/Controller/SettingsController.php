@@ -7,21 +7,25 @@ namespace AdvikLabs\Optimizer\Admin\Controller;
 use AdvikLabs\Optimizer\Support\SettingsRegistry;
 use AdvikLabs\Optimizer\Admin\View\SettingsView;
 use AdvikLabs\Optimizer\Domain\Cache\Service\CachePurgeService;
+use AdvikLabs\Optimizer\Domain\Image\Repository\ImageOptimizationRepository;
 
 class SettingsController extends AbstractController {
 
 	private SettingsRegistry $registry;
 	private SettingsView $view;
 	private CachePurgeService $purgeService;
+	private ?ImageOptimizationRepository $imageRepo;
 
 	public function __construct(
 		SettingsRegistry $registry,
 		SettingsView $view,
-		CachePurgeService $purgeService
+		CachePurgeService $purgeService,
+		?ImageOptimizationRepository $imageRepo = null
 	) {
 		$this->registry     = $registry;
 		$this->view         = $view;
 		$this->purgeService = $purgeService;
+		$this->imageRepo    = $imageRepo;
 	}
 
 	public function index(): void {
@@ -31,16 +35,26 @@ class SettingsController extends AbstractController {
 		$settings = get_option( 'advik_optimizer_settings', [] );
 		$template = match ( $tab ) {
 			'vitals' => 'settings-vitals',
+			'images' => 'settings-images',
 			default  => 'settings-cache',
 		};
 
+		$extra = [];
+
+		if ( 'images' === $tab && null !== $this->imageRepo ) {
+			$extra['queue'] = $this->imageRepo->getAll();
+		}
+
 		$this->view->render(
 			$template,
-			[
-				'tab'      => $tab,
-				'settings' => $settings,
-				'fields'   => $this->registry->getFields(),
-			]
+			array_merge(
+				[
+					'tab'      => $tab,
+					'settings' => $settings,
+					'fields'   => $this->registry->getFields(),
+				],
+				$extra
+			)
 		);
 	}
 

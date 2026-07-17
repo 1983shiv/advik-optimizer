@@ -599,3 +599,89 @@
     border: 1px solid #E3E8E6;
     border-radius: 999px;
 }
+
+.advik-optimizer-settings .advik-image-queue {
+    margin-top: 16px;
+}
+
+.advik-optimizer-settings .advik-image-queue table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.advik-optimizer-settings .advik-image-queue th {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #5B6570;
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid #E3E8E6;
+}
+
+.advik-optimizer-settings .advik-image-queue td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #F0F2F1;
+    font-size: 13px;
+    color: #12161B;
+    vertical-align: middle;
+}
+
+.advik-optimizer-settings .advik-status-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 999px;
+}
+
+.advik-optimizer-settings .advik-status-pending {
+    background: #F0F2F1;
+    color: #5B6570;
+}
+
+.advik-optimizer-settings .advik-status-processing {
+    background: #FDF2DE;
+    color: #F5A524;
+}
+
+.advik-optimizer-settings .advik-status-done {
+    background: #E4F9F1;
+    color: #17A876;
+}
+
+.advik-optimizer-settings .advik-status-failed {
+    background: #FDECEC;
+    color: #EF4444;
+}
+
+.advik-optimizer-settings .advik-status-restored {
+    background: #E8F0FE;
+    color: #1A73E8;
+}
+
+.advik-optimizer-settings .advik-savings-pct {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: #17A876;
+}
+
+.advik-optimizer-settings .advik-restore-link {
+    font-size: 12px;
+    color: #EF4444;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.advik-optimizer-settings .advik-empty-hint {
+    font-size: 13px;
+    color: #9BA5AC;
+    padding: 24px 0;
+}
+
+.advik-optimizer-settings .advik-field-conditional {
+    margin-left: 46px;
+    margin-top: -12px;
+    margin-bottom: 20px;
+}
