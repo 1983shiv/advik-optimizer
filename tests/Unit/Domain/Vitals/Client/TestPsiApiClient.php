@@ -126,10 +126,10 @@ class TestPsiApiClient extends TestCase {
 		$client->scan( 'https://example.com' );
 
 		$calledUrl = MockWP::get( '_last_remote_get_url' );
-		$this->assertNotFalse( strpos( $calledUrl, 'category=performance' ), 'Missing performance category' );
-		$this->assertNotFalse( strpos( $calledUrl, 'category=seo' ), 'Missing seo category' );
-		$this->assertNotFalse( strpos( $calledUrl, 'category=accessibility' ), 'Missing accessibility category' );
-		$this->assertNotFalse( strpos( $calledUrl, 'category=best-practices' ), 'Missing best-practices category' );
+		$this->assertNotFalse( strpos( $calledUrl, 'category=PERFORMANCE' ), 'Missing PERFORMANCE category' );
+		$this->assertNotFalse( strpos( $calledUrl, 'category=SEO' ), 'Missing SEO category' );
+		$this->assertNotFalse( strpos( $calledUrl, 'category=ACCESSIBILITY' ), 'Missing ACCESSIBILITY category' );
+		$this->assertNotFalse( strpos( $calledUrl, 'category=BEST_PRACTICES' ), 'Missing BEST_PRACTICES category' );
 	}
 
 	public function testScanHandlesMissingAuditValues(): void {

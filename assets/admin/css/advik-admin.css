@@ -389,6 +389,42 @@
     margin-top: 8px;
 }
 
+.advik-dashboard .advik-device-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid #E3E8E6;
+    margin: 0 0 24px;
+    padding: 0;
+}
+
+.advik-dashboard .advik-device-tab {
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #5B6570;
+    font-size: 13px;
+    font-weight: 500;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+}
+
+.advik-dashboard .advik-device-tab.active,
+.advik-dashboard .advik-device-tab:hover {
+    color: #1FCB8E;
+    border-bottom-color: #1FCB8E;
+}
+
+.advik-dashboard .advik-device-panel {
+    display: none;
+}
+
+.advik-dashboard .advik-device-panel.active {
+    display: block;
+}
+
 .advik-dashboard .advik-workload-strip h3 {
     font-size: 14px;
     font-weight: 600;

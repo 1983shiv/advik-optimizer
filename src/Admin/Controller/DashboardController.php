@@ -27,19 +27,26 @@ class DashboardController extends AbstractController {
 	public function index(): void {
 		$this->verifyCapability();
 
-		$scores      = $this->scoreAggregator->currentScores();
-		$metrics     = $this->scoreAggregator->latestMetrics();
-		$cacheStats  = $this->cacheStatsService->summary();
-		$lcpTrend    = $this->scoreAggregator->trend( 'lcp', '7d' );
-		$clsTrend    = $this->scoreAggregator->trend( 'cls', '7d' );
-		$inpTrend    = $this->scoreAggregator->trend( 'inp', '7d' );
+		$mobileScores   = $this->scoreAggregator->currentScores( 'mobile' );
+		$mobileMetrics  = $this->scoreAggregator->latestMetrics( 'mobile' );
+		$mobileLcpTrend = $this->scoreAggregator->trend( 'lcp', '7d', 'mobile' );
+		$mobileClsTrend = $this->scoreAggregator->trend( 'cls', '7d', 'mobile' );
+		$mobileInpTrend = $this->scoreAggregator->trend( 'inp', '7d', 'mobile' );
+
+		$desktopScores   = $this->scoreAggregator->currentScores( 'desktop' );
+		$desktopMetrics  = $this->scoreAggregator->latestMetrics( 'desktop' );
+		$desktopLcpTrend = $this->scoreAggregator->trend( 'lcp', '7d', 'desktop' );
+		$desktopClsTrend = $this->scoreAggregator->trend( 'cls', '7d', 'desktop' );
+		$desktopInpTrend = $this->scoreAggregator->trend( 'inp', '7d', 'desktop' );
+
+		$cacheStats = $this->cacheStatsService->summary();
 
 		$settings  = get_option( 'advik_optimizer_settings', [] );
 		$hasApiKey = ! empty( $settings['vitals_psi_api_key'] ?? '' );
 
 		$notice = null;
 		if ( '1' === ( $_GET['scanned'] ?? '' ) ) {
-			$total = array_sum( $scores );
+			$total = array_sum( $mobileScores );
 			if ( $total > 0 ) {
 				$notice = [ 'success', __( 'Scan complete &mdash; dashboard updated.', 'advik-optimizer' ) ];
 			} elseif ( ! $hasApiKey ) {
@@ -52,14 +59,27 @@ class DashboardController extends AbstractController {
 		$this->view->render(
 			'dashboard',
 			[
-				'scores'     => $scores,
-				'metrics'    => $metrics,
-				'cacheStats' => $cacheStats,
-				'trends'     => [
-					'lcp' => $lcpTrend,
-					'cls' => $clsTrend,
-					'inp' => $inpTrend,
+				'deviceData' => [
+					'mobile'  => [
+						'scores'  => $mobileScores,
+						'metrics' => $mobileMetrics,
+						'trends'  => [
+							'lcp' => $mobileLcpTrend,
+							'cls' => $mobileClsTrend,
+							'inp' => $mobileInpTrend,
+						],
+					],
+					'desktop' => [
+						'scores'  => $desktopScores,
+						'metrics' => $desktopMetrics,
+						'trends'  => [
+							'lcp' => $desktopLcpTrend,
+							'cls' => $desktopClsTrend,
+							'inp' => $desktopInpTrend,
+						],
+					],
 				],
+				'cacheStats' => $cacheStats,
 				'notice'     => $notice,
 				'hasApiKey'  => $hasApiKey,
 			]

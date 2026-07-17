@@ -1,6 +1,7 @@
 {
   "name": "advik-optimizer-assets",
   "scripts": {
+    "build": "npx grunt release",
     "dev": "vite build --watch",
     "zip": "node build.js",
     "env": "wp-env start",
@@ -9,6 +10,12 @@
   "devDependencies": {
     "@wordpress/env": "^10.0.0",
     "archiver": "^8.0.0",
+    "grunt": "^1.6.2",
+    "grunt-checktextdomain": "^1.0.1",
+    "grunt-contrib-clean": "^2.0.1",
+    "grunt-contrib-compress": "^2.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-wp-i18n": "^1.0.4",
     "vite": "^8.1.5"
   }
 }
