@@ -10,6 +10,7 @@ use AdvikLabs\Optimizer\Domain\Vitals\Repository\VitalsRepository;
 use AdvikLabs\Optimizer\Domain\Vitals\Support\ScoreRubric;
 use AdvikLabs\Optimizer\Domain\Vitals\Client\PsiApiClient;
 use AdvikLabs\Optimizer\Domain\Vitals\Contract\LighthouseClientInterface;
+use AdvikLabs\Optimizer\Domain\Vitals\Service\AlertService;
 use AdvikLabs\Optimizer\Domain\Vitals\Service\VitalsIngestService;
 use AdvikLabs\Optimizer\Domain\Vitals\Service\VitalsScanService;
 use AdvikLabs\Optimizer\Domain\Vitals\Service\ScoreAggregatorService;
@@ -52,11 +53,20 @@ class VitalsServiceProvider extends AbstractServiceProvider {
 		);
 
 		$container->singleton(
+			AlertService::class,
+			function () {
+				$settings = get_option( 'advik_optimizer_settings', [] );
+				return new AlertService( $settings );
+			}
+		);
+
+		$container->singleton(
 			VitalsIngestService::class,
 			function ( ContainerInterface $c ) {
 				return new VitalsIngestService(
 					$c->get( VitalsRepository::class ),
-					$c->get( AuditRepository::class )
+					$c->get( AuditRepository::class ),
+					$c->get( AlertService::class )
 				);
 			}
 		);

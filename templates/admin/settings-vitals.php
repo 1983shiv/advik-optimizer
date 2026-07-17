@@ -43,10 +43,18 @@
         </div>
         <div class="advik-field">
             <label class="advik-toggle">
-                <input type="checkbox" name="vitals_alert_email" value="1" <?php checked( ! empty( $settings['vitals_alert_email'] ) ); ?>>
+                <input type="checkbox" name="vitals_alert_email" value="1" <?php checked( ! empty( $settings['vitals_alert_email'] ) ); ?>
+                    class="advik-toggle-trigger" data-target="vitals_alert_email">
                 <span class="advik-toggle-track"></span>
                 <span class="advik-toggle-label"><?php echo esc_html__( 'Email me', 'advik-optimizer' ); ?></span>
             </label>
+        </div>
+        <div class="advik-field advik-field-conditional" id="vitals_alert_email_field" <?php echo empty( $settings['vitals_alert_email'] ) ? 'style="display:none"' : ''; ?>>
+            <label for="vitals_alert_email_address"><?php echo esc_html__( 'Email address', 'advik-optimizer' ); ?></label>
+            <input type="email" id="vitals_alert_email_address" name="vitals_alert_email_address" class="advik-text-input"
+                value="<?php echo esc_attr( $settings['vitals_alert_email_address'] ?? '' ); ?>"
+                placeholder="<?php echo esc_attr( get_option( 'admin_email' ) ); ?>">
+            <p class="advik-field-help"><?php echo esc_html__( 'Leave empty to use the WordPress admin email.', 'advik-optimizer' ); ?></p>
         </div>
         <div class="advik-field">
             <label class="advik-toggle">

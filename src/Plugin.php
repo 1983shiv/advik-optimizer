@@ -163,6 +163,14 @@ class Plugin {
 					]
 				);
 				$registry->addField(
+					'vitals_alert_email_address',
+					[
+						'type'    => 'text',
+						'default' => '',
+						'label'   => __( 'Alert email address', 'advik-optimizer' ),
+					]
+				);
+				$registry->addField(
 					'vitals_alert_webhook',
 					[
 						'type'     => 'checkbox',

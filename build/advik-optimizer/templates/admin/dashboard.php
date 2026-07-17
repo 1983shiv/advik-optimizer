@@ -66,6 +66,11 @@
                     <span class="advik-card-stat"><?php echo esc_html( round( $metrics['lcp'], 1 ) ); ?>s avg</span>
                 <?php endif; ?>
             </div>
+            <div class="advik-trend-ranges">
+                <button class="advik-trend-range active" data-range="7d">7 <?php echo esc_html__( 'days', 'advik-optimizer' ); ?></button>
+                <button class="advik-trend-range" data-range="30d">30 <?php echo esc_html__( 'days', 'advik-optimizer' ); ?></button>
+                <button class="advik-trend-range" data-range="90d">90 <?php echo esc_html__( 'days', 'advik-optimizer' ); ?></button>
+            </div>
             <div class="advik-metric-deltas">
                 <?php
                 $metricDefs = [
@@ -73,9 +78,9 @@
                     'cls' => [ 'label' => 'CLS', 'unit' => '', 'good' => 0.1, 'poor' => 0.25, 'invert' => true ],
                     'inp' => [ 'label' => 'INP', 'unit' => 'ms', 'good' => 200, 'poor' => 500, 'invert' => true ],
                 ];
+                $activeRange = '7d';
                 foreach ( $metricDefs as $key => $def ) :
                     $value = $metrics[ $key ];
-                    $trendData = $trends[ $key ] ?? [];
                     $isGood = null !== $value && $value <= $def['good'];
                     $isPoor = null !== $value && $value > $def['poor'];
                     $statusClass = null === $value ? '' : ( $isGood ? 'good' : ( $isPoor ? 'poor' : 'warning' ) );
@@ -94,20 +99,22 @@
                         <?php endif; ?>
                     </div>
                     <span class="advik-metric-delta-value"><?php echo $displayVal; ?><?php echo esc_html( $displayUnit ); ?></span>
-                    <?php if ( ! empty( $trendData ) ) : ?>
-                        <div class="advik-sparkline">
+                    <?php foreach ( [ '7d', '30d', '90d' ] as $range ) : ?>
+                        <?php $trendData = $trends[ $key ][ $range ] ?? []; ?>
+                        <?php if ( ! empty( $trendData ) ) : ?>
+                        <div class="advik-sparkline<?php echo $range === $activeRange ? '' : ' advik-sparkline-hidden'; ?>" data-range="<?php echo esc_attr( $range ); ?>" data-metric="<?php echo esc_attr( $key ); ?>">
                             <?php
                             $vals = array_map( fn( $p ) => (float) $p['value'], $trendData );
                             $min  = min( $vals );
                             $max  = max( $vals );
-                            $range = ( $max - $min ) ?: 1;
+                            $r = ( $max - $min ) ?: 1;
                             $points = [];
                             $count = count( $vals );
                             $w = 120;
                             $h = 24;
                             foreach ( $vals as $i => $v ) {
                                 $x = round( $i / max( 1, $count - 1 ) * $w, 1 );
-                                $y = round( $h - ( ( $v - $min ) / $range ) * $h, 1 );
+                                $y = round( $h - ( ( $v - $min ) / $r ) * $h, 1 );
                                 $points[] = "{$x},{$y}";
                             }
                             $lineColor = $isGood ? '#1FCB8E' : ( $isPoor ? '#EF4444' : '#F5A524' );
@@ -116,7 +123,8 @@
                                 <polyline points="<?php echo esc_attr( implode( ' ', $points ) ); ?>" fill="none" stroke="<?php echo esc_attr( $lineColor ); ?>" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </div>
-                    <?php endif; ?>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
                 </div>
                 <?php endforeach; ?>
             </div>

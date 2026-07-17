@@ -33,7 +33,7 @@ class SettingsView extends AbstractView {
 	private function renderTab( string $slug, string $label, string $active ): void {
 		$url   = add_query_arg(
 			[
-				'page' => 'advik-optimizer',
+				'page' => 'advik-optimizer-settings',
 				'tab'  => $slug,
 			],
 			admin_url( 'admin.php' )

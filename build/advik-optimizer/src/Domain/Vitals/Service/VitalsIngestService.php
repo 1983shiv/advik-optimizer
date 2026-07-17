@@ -13,10 +13,12 @@ class VitalsIngestService {
 
 	private VitalsRepository $repository;
 	private AuditRepository $auditRepository;
+	private ?AlertService $alertService;
 
-	public function __construct( VitalsRepository $repository, AuditRepository $auditRepository ) {
-		$this->repository       = $repository;
-		$this->auditRepository  = $auditRepository;
+	public function __construct( VitalsRepository $repository, AuditRepository $auditRepository, ?AlertService $alertService = null ) {
+		$this->repository      = $repository;
+		$this->auditRepository = $auditRepository;
+		$this->alertService    = $alertService;
 	}
 
 	public function ingestLabData( LabResult $labResult ): void {
@@ -26,6 +28,18 @@ class VitalsIngestService {
 		$metrics = $labResult->toMetrics();
 		$this->repository->storeBatch( $metrics );
 		$this->auditRepository->storeBatch( $labResult->getAudits(), $labResult->getDevice() );
+
+		if ( $this->alertService ) {
+			$this->alertService->checkAndAlert(
+				[
+					'lcp'  => $labResult->getLcp(),
+					'cls'  => $labResult->getCls(),
+					'inp'  => $labResult->getInp(),
+					'ttfb' => $labResult->getTtfb(),
+				],
+				$labResult->getDevice()
+			);
+		}
 	}
 
 	public function ingestFieldData( array $payload ): void {
@@ -59,6 +73,16 @@ class VitalsIngestService {
 
 		if ( ! empty( $metrics ) ) {
 			$this->repository->storeBatch( $metrics );
+		}
+
+		if ( $this->alertService ) {
+			$this->alertService->checkAndAlert(
+				array_filter(
+					compact( 'lcp', 'cls', 'inp', 'ttfb' ),
+					fn ( $v ) => null !== $v
+				),
+				$device
+			);
 		}
 	}
 }

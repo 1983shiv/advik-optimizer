@@ -31,28 +31,33 @@ class DashboardController extends AbstractController {
 	public function index(): void {
 		$this->verifyCapability();
 
-		$mobileScores   = $this->scoreAggregator->currentScores( 'mobile' );
-		$mobileMetrics  = $this->scoreAggregator->latestMetrics( 'mobile' );
-		$mobileLcpTrend = $this->scoreAggregator->trend( 'lcp', '7d', 'mobile' );
-		$mobileClsTrend = $this->scoreAggregator->trend( 'cls', '7d', 'mobile' );
-		$mobileInpTrend = $this->scoreAggregator->trend( 'inp', '7d', 'mobile' );
+		$ranges = [ '7d', '30d', '90d' ];
 
-		$desktopScores   = $this->scoreAggregator->currentScores( 'desktop' );
-		$desktopMetrics  = $this->scoreAggregator->latestMetrics( 'desktop' );
-		$desktopLcpTrend = $this->scoreAggregator->trend( 'lcp', '7d', 'desktop' );
-		$desktopClsTrend = $this->scoreAggregator->trend( 'cls', '7d', 'desktop' );
-		$desktopInpTrend = $this->scoreAggregator->trend( 'inp', '7d', 'desktop' );
+		$deviceData = [];
+		foreach ( [ 'mobile', 'desktop' ] as $device ) {
+			$scores  = $this->scoreAggregator->currentScores( $device );
+			$metrics = $this->scoreAggregator->latestMetrics( $device );
+
+			$trends = [];
+			foreach ( $ranges as $range ) {
+				foreach ( [ 'lcp', 'cls', 'inp' ] as $metric ) {
+					$trends[ $metric ][ $range ] = $this->scoreAggregator->trend( $metric, $range, $device );
+				}
+			}
+
+			$audits = $this->auditRepository->getByDevice( $device, 20 );
+
+			$deviceData[ $device ] = compact( 'scores', 'metrics', 'trends', 'audits' );
+		}
 
 		$cacheStats = $this->cacheStatsService->summary();
-
-		$mobileAudits  = $this->auditRepository->getByDevice( 'mobile', 20 );
-		$desktopAudits = $this->auditRepository->getByDevice( 'desktop', 20 );
 
 		$settings  = get_option( 'advik_optimizer_settings', [] );
 		$hasApiKey = ! empty( $settings['vitals_psi_api_key'] ?? '' );
 
 		$notice = null;
 		if ( '1' === ( $_GET['scanned'] ?? '' ) ) {
+			$mobileScores = $deviceData['mobile']['scores'];
 			$total = array_sum( $mobileScores );
 			if ( $total > 0 ) {
 				$notice = [ 'success', __( 'Scan complete &mdash; dashboard updated.', 'advik-optimizer' ) ];
@@ -66,28 +71,7 @@ class DashboardController extends AbstractController {
 		$this->view->render(
 			'dashboard',
 			[
-				'deviceData' => [
-					'mobile'  => [
-						'scores'  => $mobileScores,
-						'metrics' => $mobileMetrics,
-						'trends'  => [
-							'lcp' => $mobileLcpTrend,
-							'cls' => $mobileClsTrend,
-							'inp' => $mobileInpTrend,
-						],
-						'audits'  => $mobileAudits,
-					],
-					'desktop' => [
-						'scores'  => $desktopScores,
-						'metrics' => $desktopMetrics,
-						'trends'  => [
-							'lcp' => $desktopLcpTrend,
-							'cls' => $desktopClsTrend,
-							'inp' => $desktopInpTrend,
-						],
-						'audits'  => $desktopAudits,
-					],
-				],
+				'deviceData' => $deviceData,
 				'cacheStats' => $cacheStats,
 				'notice'     => $notice,
 				'hasApiKey'  => $hasApiKey,
