@@ -19,7 +19,7 @@ class SettingsView extends AbstractView {
 			<nav class="advik-tabs">
 				<?php $this->renderTab( 'cache', __( 'Cache', 'advik-optimizer' ), $tab ); ?>
 				<?php $this->renderTab( 'images', __( 'Images', 'advik-optimizer' ), $tab ); ?>
-				<span class="advik-tab-disabled"><?php echo esc_html__( 'Minify', 'advik-optimizer' ); ?></span>
+				<?php $this->renderTab( 'minify', __( 'Minify', 'advik-optimizer' ), $tab ); ?>
 				<?php $this->renderTab( 'vitals', __( 'Core Web Vitals', 'advik-optimizer' ), $tab ); ?>
 				<span class="advik-tab-disabled"><?php echo esc_html__( 'SEO', 'advik-optimizer' ); ?></span>
 				<span class="advik-tab-disabled"><?php echo esc_html__( 'CDN & Database', 'advik-optimizer' ); ?></span>

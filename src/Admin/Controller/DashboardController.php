@@ -9,6 +9,7 @@ use AdvikLabs\Optimizer\Domain\Cache\Service\CacheStatsService;
 use AdvikLabs\Optimizer\Domain\Vitals\Repository\AuditRepository;
 use AdvikLabs\Optimizer\Domain\Vitals\Service\ScoreAggregatorService;
 use AdvikLabs\Optimizer\Domain\Image\Service\ImageSavingsService;
+use AdvikLabs\Optimizer\Domain\Minify\Service\MinifySavingsService;
 
 class DashboardController extends AbstractController {
 
@@ -17,19 +18,22 @@ class DashboardController extends AbstractController {
 	private CacheStatsService $cacheStatsService;
 	private AuditRepository $auditRepository;
 	private ImageSavingsService $imageSavingsService;
+	private MinifySavingsService $minifySavingsService;
 
 	public function __construct(
 		DashboardView $view,
 		ScoreAggregatorService $scoreAggregator,
 		CacheStatsService $cacheStatsService,
 		AuditRepository $auditRepository,
-		ImageSavingsService $imageSavingsService
+		ImageSavingsService $imageSavingsService,
+		MinifySavingsService $minifySavingsService
 	) {
 		$this->view                = $view;
 		$this->scoreAggregator     = $scoreAggregator;
 		$this->cacheStatsService   = $cacheStatsService;
 		$this->auditRepository     = $auditRepository;
 		$this->imageSavingsService = $imageSavingsService;
+		$this->minifySavingsService = $minifySavingsService;
 	}
 
 	public function index(): void {
@@ -56,6 +60,7 @@ class DashboardController extends AbstractController {
 
 		$cacheStats = $this->cacheStatsService->summary();
 		$imageStats = $this->imageSavingsService->summary();
+		$minifyStats = $this->minifySavingsService->summary();
 
 		$settings  = get_option( 'advik_optimizer_settings', [] );
 		$hasApiKey = ! empty( $settings['vitals_psi_api_key'] ?? '' );
@@ -73,15 +78,16 @@ class DashboardController extends AbstractController {
 			}
 		}
 
-		$this->view->render(
-			'dashboard',
-			[
-				'deviceData' => $deviceData,
-				'cacheStats' => $cacheStats,
-				'imageStats' => $imageStats,
-				'notice'     => $notice,
-				'hasApiKey'  => $hasApiKey,
-			]
-		);
+			$this->view->render(
+				'dashboard',
+				[
+					'deviceData' => $deviceData,
+					'cacheStats' => $cacheStats,
+					'imageStats' => $imageStats,
+					'minifyStats' => $minifyStats,
+					'notice'     => $notice,
+					'hasApiKey'  => $hasApiKey,
+				]
+			);
 	}
 }

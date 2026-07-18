@@ -18,6 +18,7 @@ use AdvikLabs\Optimizer\Hook\Listener\ContentChangeListener;
 use AdvikLabs\Optimizer\Infrastructure\ServiceProvider\CacheServiceProvider;
 use AdvikLabs\Optimizer\Infrastructure\ServiceProvider\VitalsServiceProvider;
 use AdvikLabs\Optimizer\Infrastructure\ServiceProvider\ImageServiceProvider;
+use AdvikLabs\Optimizer\Infrastructure\ServiceProvider\MinifyServiceProvider;
 use AdvikLabs\Optimizer\Infrastructure\Cron\VitalsScanJob;
 use AdvikLabs\Optimizer\Rest\RestKernel;
 use AdvikLabs\Optimizer\Rest\Controller\AuditController;
@@ -31,6 +32,8 @@ use AdvikLabs\Optimizer\Domain\Image\Service\ImageQueueService;
 use AdvikLabs\Optimizer\Domain\Image\Service\ImageRestoreService;
 use AdvikLabs\Optimizer\Frontend\ImageRewriter;
 use AdvikLabs\Optimizer\Admin\Controller\ImageController;
+use AdvikLabs\Optimizer\Domain\Minify\Service\MinifySavingsService;
+use AdvikLabs\Optimizer\Domain\Minify\Repository\CriticalCssRepository;
 
 class Plugin {
 
@@ -229,6 +232,59 @@ class Plugin {
 					]
 				);
 
+				$registry->addField(
+					'module_minify',
+					[
+						'type'     => 'checkbox',
+						'default'  => true,
+						'sanitize' => fn ( $v ) => filter_var( $v, FILTER_VALIDATE_BOOLEAN ),
+						'label'    => __( 'Enable asset minification', 'advik-optimizer' ),
+					]
+				);
+				$registry->addField(
+					'minify_css',
+					[
+						'type'     => 'checkbox',
+						'default'  => true,
+						'sanitize' => fn ( $v ) => filter_var( $v, FILTER_VALIDATE_BOOLEAN ),
+						'label'    => __( 'Minify CSS', 'advik-optimizer' ),
+					]
+				);
+				$registry->addField(
+					'minify_js',
+					[
+						'type'     => 'checkbox',
+						'default'  => true,
+						'sanitize' => fn ( $v ) => filter_var( $v, FILTER_VALIDATE_BOOLEAN ),
+						'label'    => __( 'Minify JavaScript', 'advik-optimizer' ),
+					]
+				);
+				$registry->addField(
+					'minify_html',
+					[
+						'type'     => 'checkbox',
+						'default'  => false,
+						'sanitize' => fn ( $v ) => filter_var( $v, FILTER_VALIDATE_BOOLEAN ),
+						'label'    => __( 'Minify HTML', 'advik-optimizer' ),
+					]
+				);
+				$registry->addField(
+					'minify_exclude_css',
+					[
+						'type'    => 'text',
+						'default' => '',
+						'label'   => __( 'CSS handles to exclude from minification', 'advik-optimizer' ),
+					]
+				);
+				$registry->addField(
+					'minify_exclude_js',
+					[
+						'type'    => 'text',
+						'default' => '',
+						'label'   => __( 'JavaScript handles to exclude from minification', 'advik-optimizer' ),
+					]
+				);
+
 				return $registry;
 			}
 		);
@@ -254,6 +310,7 @@ class Plugin {
 		( new CacheServiceProvider() )->register( $this->container );
 		( new VitalsServiceProvider() )->register( $this->container );
 		( new ImageServiceProvider() )->register( $this->container );
+		( new MinifyServiceProvider() )->register( $this->container );
 	}
 
 	private function registerControllers(): void {
@@ -265,7 +322,8 @@ class Plugin {
 					$c->get( \AdvikLabs\Optimizer\Domain\Vitals\Service\ScoreAggregatorService::class ),
 					$c->get( \AdvikLabs\Optimizer\Domain\Cache\Service\CacheStatsService::class ),
 					$c->get( \AdvikLabs\Optimizer\Domain\Vitals\Repository\AuditRepository::class ),
-					$c->get( ImageSavingsService::class )
+					$c->get( ImageSavingsService::class ),
+					$c->get( MinifySavingsService::class )
 				);
 			}
 		);
@@ -277,7 +335,8 @@ class Plugin {
 					$c->get( SettingsRegistry::class ),
 					$c->get( SettingsView::class ),
 					$c->get( \AdvikLabs\Optimizer\Domain\Cache\Service\CachePurgeService::class ),
-					$c->get( \AdvikLabs\Optimizer\Domain\Image\Repository\ImageOptimizationRepository::class )
+					$c->get( \AdvikLabs\Optimizer\Domain\Image\Repository\ImageOptimizationRepository::class ),
+					$c->get( CriticalCssRepository::class )
 				);
 			}
 		);
@@ -476,6 +535,104 @@ class Plugin {
 				if ( ! empty( $settings['module_images'] ) ) {
 					$this->container->get( ImageRewriter::class )->registerHooks();
 				}
+			}
+		);
+
+		add_action(
+			'init',
+			function () {
+				$settings = get_option( 'advik_optimizer_settings', [] );
+				if ( ! empty( $settings['module_minify'] ) ) {
+					$this->container->get( \AdvikLabs\Optimizer\Domain\Minify\Service\MinifyService::class )->registerHooks();
+				}
+			}
+		);
+
+		add_action(
+			'init',
+			function () {
+				$settings = get_option( 'advik_optimizer_settings', [] );
+				if ( ! empty( $settings['module_minify'] ) ) {
+					$rollback = $this->container->get( \AdvikLabs\Optimizer\Domain\Minify\Service\MinifyRollbackGuard::class );
+					if ( ! $rollback->isRolledBack() ) {
+						$rollback->registerHooks();
+					}
+				}
+			}
+		);
+
+		add_action(
+			'wp_head',
+			function () {
+				$settings = get_option( 'advik_optimizer_settings', [] );
+				if ( ! empty( $settings['module_minify'] ) ) {
+					$this->container->get( \AdvikLabs\Optimizer\Domain\Minify\Service\CriticalCssInjector::class )->inject();
+				}
+			}
+		);
+
+		if ( ! is_admin() ) {
+			add_action(
+				'wp_head',
+				function () {
+					$settings = get_option( 'advik_optimizer_settings', [] );
+					if ( ! empty( $settings['module_minify'] ) && ! empty( $settings['minify_html'] ) ) {
+						ob_start( [ $this->container->get( \AdvikLabs\Optimizer\Domain\Minify\Service\MinifyService::class ), 'minifyHtml' ] );
+					}
+				},
+				0
+			);
+		}
+
+		add_action(
+			'admin_post_advik_optimizer_scan_critical_css',
+			function () {
+				if ( ! current_user_can( 'manage_advik_optimizer' ) ) {
+					wp_die( esc_html__( 'You do not have sufficient permissions.', 'advik-optimizer' ) );
+				}
+				check_admin_referer( 'advik_optimizer_scan_critical_css' );
+
+				$urls = [
+					'front_page' => home_url(),
+				];
+
+				if ( post_type_exists( 'post' ) ) {
+					$posts = get_posts(
+						[
+							'numberposts' => 1,
+							'post_type' => 'post',
+						]
+					);
+					if ( ! empty( $posts ) ) {
+						$urls['singular_post'] = get_permalink( $posts[0] );
+					}
+				}
+
+				if ( post_type_exists( 'page' ) ) {
+					$pages = get_posts(
+						[
+							'numberposts' => 1,
+							'post_type' => 'page',
+						]
+					);
+					if ( ! empty( $pages ) ) {
+						$urls['singular_page'] = get_permalink( $pages[0] );
+					}
+				}
+
+				$this->container->get( \AdvikLabs\Optimizer\Domain\Minify\Service\CriticalCssService::class )->scan( $urls );
+
+				wp_safe_redirect(
+					add_query_arg(
+						[
+							'page' => 'advik-optimizer-settings',
+							'tab'  => 'minify',
+							'scanned' => '1',
+						],
+						admin_url( 'admin.php' )
+					)
+				);
+				exit;
 			}
 		);
 	}

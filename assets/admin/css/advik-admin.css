@@ -685,3 +685,79 @@
     margin-top: -12px;
     margin-bottom: 20px;
 }
+
+.advik-optimizer-settings .advik-critical-callout {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: #FEF9E7;
+    border: 1px solid #F5A524;
+    border-radius: 8px;
+    padding: 12px 16px;
+}
+
+.advik-optimizer-settings .advik-critical-callout-icon {
+    color: #F5A524;
+    flex-shrink: 0;
+    font-size: 16px;
+}
+
+.advik-optimizer-settings .advik-critical-callout-text {
+    margin: 0;
+    font-size: 13px;
+    color: #5B6570;
+}
+
+.advik-optimizer-settings .advik-rollback-notice {
+    background: #FDECEC;
+    border: 1px solid #EF4444;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+}
+
+.advik-optimizer-settings .advik-exclusion-tag-input {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 6px 8px;
+    border: 1px solid #E3E8E6;
+    border-radius: 6px;
+    max-width: 480px;
+    cursor: text;
+}
+
+.advik-optimizer-settings .advik-exclusion-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    font-size: 12px;
+    background: #F0F2F1;
+    color: #5B6570;
+    border-radius: 999px;
+}
+
+.advik-optimizer-settings .advik-exclusion-tag-remove {
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    color: #9BA5AC;
+}
+
+.advik-optimizer-settings .advik-exclusion-tag-remove:hover {
+    color: #EF4444;
+}
+
+.advik-optimizer-settings .advik-exclusion-tag-input input {
+    border: none;
+    outline: none;
+    flex: 1;
+    min-width: 100px;
+    font-size: 13px;
+    padding: 2px 0;
+}
+
+.advik-optimizer-settings .advik-exclusion-tag-input input::placeholder {
+    color: #C0C8C4;
+}

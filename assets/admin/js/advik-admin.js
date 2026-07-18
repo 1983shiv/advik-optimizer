@@ -25,6 +25,75 @@
         }
     }
 
+    if (settingsPage) {
+        var excludeCss = document.getElementById('minify_exclude_css');
+        var excludeJs = document.getElementById('minify_exclude_js');
+        [excludeCss, excludeJs].forEach(function (input) {
+            if (!input) return;
+            var wrapper = document.createElement('div');
+            wrapper.className = 'advik-exclusion-tag-input';
+            input.style.display = 'none';
+            input.parentNode.insertBefore(wrapper, input);
+            var hiddenInput = input;
+            var tagContainer = wrapper;
+            function renderTags() {
+                tagContainer.innerHTML = '';
+                var val = hiddenInput.value;
+                var tags = val ? val.split(',').map(function (t) { return t.trim(); }).filter(Boolean) : [];
+                tags.forEach(function (tag) {
+                    var chip = document.createElement('span');
+                    chip.className = 'advik-exclusion-tag';
+                    chip.innerHTML = '<span>' + tag + '</span><span class="advik-exclusion-tag-remove" data-tag="' + tag + '">&times;</span>';
+                    tagContainer.appendChild(chip);
+                });
+                var newInput = document.createElement('input');
+                newInput.type = 'text';
+                newInput.placeholder = hiddenInput.placeholder || '';
+                newInput.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' || e.key === ',') {
+                        e.preventDefault();
+                        var value = this.value.trim();
+                        if (value) {
+                            var existing = hiddenInput.value ? hiddenInput.value.split(',').map(function (t) { return t.trim(); }) : [];
+                            if (existing.indexOf(value) === -1) {
+                                existing.push(value);
+                                hiddenInput.value = existing.join(',');
+                            }
+                            this.value = '';
+                            renderTags();
+                        }
+                    }
+                });
+                newInput.addEventListener('blur', function () {
+                    var value = this.value.trim();
+                    if (value) {
+                        var existing = hiddenInput.value ? hiddenInput.value.split(',').map(function (t) { return t.trim(); }) : [];
+                        if (existing.indexOf(value) === -1) {
+                            existing.push(value);
+                            hiddenInput.value = existing.join(',');
+                        }
+                        this.value = '';
+                        renderTags();
+                    }
+                });
+                tagContainer.appendChild(newInput);
+            }
+            tagContainer.addEventListener('click', function (e) {
+                if (e.target.classList.contains('advik-exclusion-tag-remove')) {
+                    var tag = e.target.getAttribute('data-tag');
+                    var existing = hiddenInput.value ? hiddenInput.value.split(',').map(function (t) { return t.trim(); }) : [];
+                    var idx = existing.indexOf(tag);
+                    if (idx !== -1) {
+                        existing.splice(idx, 1);
+                        hiddenInput.value = existing.join(',');
+                        renderTags();
+                    }
+                }
+            });
+            renderTags();
+        });
+    }
+
     var isDashboard = document.querySelector('.advik-dashboard');
 
     if (isDashboard) {

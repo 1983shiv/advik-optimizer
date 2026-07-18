@@ -195,8 +195,8 @@
                 <span class="advik-stat-value"><?php echo ( $imageStats['count'] ?? 0 ) > 0 ? esc_html( $imageStats['savings'] ) : '&mdash;'; ?></span>
                 <span class="advik-stat-label"><?php echo esc_html__( 'Images Saved', 'advik-optimizer' ); ?></span>
             </div>
-            <div class="advik-stat-tile advik-stat-tile-empty">
-                <span class="advik-stat-value">&mdash;</span>
+            <div class="advik-stat-tile<?php echo ( $minifyStats['count'] ?? 0 ) > 0 ? '' : ' advik-stat-tile-empty'; ?>">
+                <span class="advik-stat-value"><?php echo ( $minifyStats['count'] ?? 0 ) > 0 ? esc_html( $minifyStats['savings'] ) : '&mdash;'; ?></span>
                 <span class="advik-stat-label"><?php echo esc_html__( 'JS/CSS Reduced', 'advik-optimizer' ); ?></span>
             </div>
         </div>

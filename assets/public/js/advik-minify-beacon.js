@@ -1,0 +1,1 @@
+(function(){'use strict';window.addEventListener('error',function(e){var r=new XMLHttpRequest;r.open('POST',advikMinify?.ajaxUrl||'/',!0);r.setRequestHeader('Content-Type','application/x-www-form-urlencoded');r.send('action=advik_minify_report_error&url='+encodeURIComponent(location.href));});})();

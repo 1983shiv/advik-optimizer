@@ -8,6 +8,7 @@ use AdvikLabs\Optimizer\Support\SettingsRegistry;
 use AdvikLabs\Optimizer\Admin\View\SettingsView;
 use AdvikLabs\Optimizer\Domain\Cache\Service\CachePurgeService;
 use AdvikLabs\Optimizer\Domain\Image\Repository\ImageOptimizationRepository;
+use AdvikLabs\Optimizer\Domain\Minify\Repository\CriticalCssRepository;
 
 class SettingsController extends AbstractController {
 
@@ -15,17 +16,20 @@ class SettingsController extends AbstractController {
 	private SettingsView $view;
 	private CachePurgeService $purgeService;
 	private ?ImageOptimizationRepository $imageRepo;
+	private ?CriticalCssRepository $criticalCssRepo;
 
 	public function __construct(
 		SettingsRegistry $registry,
 		SettingsView $view,
 		CachePurgeService $purgeService,
-		?ImageOptimizationRepository $imageRepo = null
+		?ImageOptimizationRepository $imageRepo = null,
+		?CriticalCssRepository $criticalCssRepo = null
 	) {
-		$this->registry     = $registry;
-		$this->view         = $view;
-		$this->purgeService = $purgeService;
-		$this->imageRepo    = $imageRepo;
+		$this->registry        = $registry;
+		$this->view            = $view;
+		$this->purgeService    = $purgeService;
+		$this->imageRepo       = $imageRepo;
+		$this->criticalCssRepo = $criticalCssRepo;
 	}
 
 	public function index(): void {
@@ -36,6 +40,7 @@ class SettingsController extends AbstractController {
 		$template = match ( $tab ) {
 			'vitals' => 'settings-vitals',
 			'images' => 'settings-images',
+			'minify' => 'settings-minify',
 			default  => 'settings-cache',
 		};
 
@@ -43,6 +48,11 @@ class SettingsController extends AbstractController {
 
 		if ( 'images' === $tab && null !== $this->imageRepo ) {
 			$extra['queue'] = $this->imageRepo->getAll();
+		}
+
+		if ( 'minify' === $tab && null !== $this->criticalCssRepo ) {
+			$extra['lastScanTime'] = $this->criticalCssRepo->getLastScanTime();
+			$extra['ruleCount']    = $this->criticalCssRepo->getRuleCount();
 		}
 
 		$this->view->render(
