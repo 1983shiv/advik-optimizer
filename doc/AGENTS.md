@@ -25,6 +25,7 @@ This file is the standing instruction set for any AI coding agent (Claude Code, 
 | 9 | `advik-optimizer-asset-inventory.md` | Read when a screen needs a real asset (logo, icon, font) — check status here before using a placeholder, and never silently ship a placeholder as final. |
 | 10 | `advik-optimizer-wporg-submission-checklist.md` | Read in full only at Phase 9 (Hardening), before any WordPress.org submission. Sections 5–7 (security/code-quality) can be checked incrementally from Phase 1 onward. **Contains a hard blocker: do not submit to WordPress.org until real optimization functionality exists — the Coming-Soon/Waitlist module alone is not a valid submission.** |
 | 11 | `advik-optimizer-build-release-process.md` | The **only** sanctioned process for producing a build/zip. Read before any packaging task, every time. Never construct ad hoc `rm`/`mv`/`cp`/`zip` shell commands for this — always run the fixed `npx grunt release` (or `wp dist-archive`) sequence defined there. |
+| 12 | `advik-optimizer-competitive-analysis-autoptimize.md` | Background/rationale doc — its actionable findings have already been merged into docs 3 and 4 (Build Phasing / Acceptance Criteria) for the phases affected so far. Read this doc directly only if you need the *why* behind one of those merged items, or if a future competitive analysis doc is added and needs the same merge treatment. Don't treat it as a live source of unmerged requirements — if you find an item in it that isn't yet reflected in docs 3/4, flag that as a gap to the human rather than implementing from doc 12 directly. |
 
 ## 2. The One Rule That Matters Most
 
@@ -51,10 +52,11 @@ This file is the standing instruction set for any AI coding agent (Claude Code, 
 
 1. State current phase (from doc 3) and confirm prior phase's Definition of Done was met.
 2. Pull only the doc sections relevant to this phase's scope — quote or reference them, don't restate the whole document.
-3. Implement.
-4. Run `composer lint && composer test` locally before presenting work as complete.
-5. Walk through the phase's checklist in doc 4 explicitly, item by item.
-6. Report anything that had to deviate from the docs (missing spec, ambiguous requirement, asset not yet available per doc 9) rather than silently improvising — flag it back to the human.
+3. **Check doc 4 for any items flagged as a backfill against an already-closed earlier phase** (this happens when a competitive-analysis or other retroactive finding gets merged in after that phase was marked done — e.g., Phase 4's acceptance criteria currently flags two Phase 1/Cache items that need backfilling). Surface these to the human before proceeding, rather than silently skipping them or silently doing the backfill without mention.
+4. Implement.
+5. Run `composer lint && composer test` locally before presenting work as complete.
+6. Walk through the phase's checklist in doc 4 explicitly, item by item.
+7. Report anything that had to deviate from the docs (missing spec, ambiguous requirement, asset not yet available per doc 9) rather than silently improvising — flag it back to the human.
 
 ## 6. Things to Never Do
 

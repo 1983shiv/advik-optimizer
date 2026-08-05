@@ -8,6 +8,7 @@ use AdvikLabs\Optimizer\Container\ContainerInterface;
 use AdvikLabs\Optimizer\Domain\Minify\Minifier\CssMinifier;
 use AdvikLabs\Optimizer\Domain\Minify\Minifier\JsMinifier;
 use AdvikLabs\Optimizer\Domain\Minify\Minifier\HtmlMinifier;
+use AdvikLabs\Optimizer\Domain\Minify\Minifier\RemoteGetRenderer;
 use AdvikLabs\Optimizer\Domain\Minify\Repository\CriticalCssRepository;
 use AdvikLabs\Optimizer\Domain\Minify\Service\CriticalCssService;
 use AdvikLabs\Optimizer\Domain\Minify\Service\CriticalCssInjector;
@@ -49,10 +50,18 @@ class MinifyServiceProvider extends AbstractServiceProvider {
 		);
 
 		$container->singleton(
+			RemoteGetRenderer::class,
+			function () {
+				return new RemoteGetRenderer();
+			}
+		);
+
+		$container->singleton(
 			CriticalCssService::class,
 			function ( ContainerInterface $c ) {
 				return new CriticalCssService(
-					$c->get( CriticalCssRepository::class )
+					$c->get( CriticalCssRepository::class ),
+					$c->get( RemoteGetRenderer::class )
 				);
 			}
 		);

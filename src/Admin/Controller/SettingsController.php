@@ -68,6 +68,17 @@ class SettingsController extends AbstractController {
 		);
 	}
 
+	private function getFieldsForTab( string $tab ): array {
+		$tabMap = [
+			'cache'  => [ 'module_cache', 'cache_ttl', 'exclude_logged_in', 'excluded_urls', 'cache_warming' ],
+			'images' => [ 'module_images', 'image_quality', 'image_format', 'image_lazy_loading' ],
+			'minify' => [ 'module_minify', 'minify_css', 'minify_js', 'minify_html', 'minify_exclude_css', 'minify_exclude_js' ],
+			'vitals' => [ 'module_vitals', 'vitals_sampling_rate', 'vitals_psi_api_key', 'vitals_alert_lcp', 'vitals_alert_cls', 'vitals_alert_inp', 'vitals_alert_email', 'vitals_alert_email_address', 'vitals_alert_webhook', 'vitals_webhook_url' ],
+		];
+
+		return $tabMap[ $tab ] ?? [];
+	}
+
 	public function save(): void {
 		$this->verifyCapability();
 		check_admin_referer( 'advik_optimizer_save_settings' );
@@ -75,6 +86,8 @@ class SettingsController extends AbstractController {
 		$tab      = isset( $_POST['tab'] ) ? sanitize_key( wp_unslash( $_POST['tab'] ) ) : 'cache';
 		$settings = get_option( 'advik_optimizer_settings', [] );
 		$fields   = $this->registry->getFields();
+
+		$tabFields = $this->getFieldsForTab( $tab );
 
 		foreach ( $fields as $key => $config ) {
 			if ( isset( $_POST[ $key ] ) ) {
@@ -92,7 +105,7 @@ class SettingsController extends AbstractController {
 				}
 
 				$settings[ $key ] = $value;
-			} elseif ( 'checkbox' === ( $config['type'] ?? '' ) ) {
+			} elseif ( 'checkbox' === ( $config['type'] ?? '' ) && in_array( $key, $tabFields, true ) ) {
 				$settings[ $key ] = false;
 			}
 		}

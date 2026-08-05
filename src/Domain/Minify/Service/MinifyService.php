@@ -60,11 +60,15 @@ class MinifyService {
 			}
 
 			$src = $wp_styles->registered[ $handle ]->src ?? '';
-			if ( '' === $src ) {
+			if ( ! is_string( $src ) || '' === $src ) {
 				continue;
 			}
 
 			if ( $this->isExternal( $src ) ) {
+				continue;
+			}
+
+			if ( $this->isAlreadyMinified( $src ) ) {
 				continue;
 			}
 
@@ -115,11 +119,15 @@ class MinifyService {
 			}
 
 			$src = $wp_scripts->registered[ $handle ]->src ?? '';
-			if ( '' === $src ) {
+			if ( ! is_string( $src ) || '' === $src ) {
 				continue;
 			}
 
 			if ( $this->isExternal( $src ) ) {
+				continue;
+			}
+
+			if ( $this->isAlreadyMinified( $src ) ) {
 				continue;
 			}
 
@@ -198,6 +206,10 @@ class MinifyService {
 	private function getCacheUrl(): string {
 		$uploadDir = wp_upload_dir();
 		return $uploadDir['baseurl'] . '/advik-optimizer/cache/assets';
+	}
+
+	private function isAlreadyMinified( string $url ): bool {
+		return (bool) preg_match( '/\.min\.(css|js)(\?|$)/i', $url );
 	}
 
 	private function getCacheKey( string $filePath ): string {

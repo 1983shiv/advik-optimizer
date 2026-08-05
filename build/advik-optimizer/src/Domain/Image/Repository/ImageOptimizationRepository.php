@@ -159,24 +159,38 @@ class ImageOptimizationRepository {
 	}
 
 	public function getUnprocessedAttachmentIds( int $limit = 50 ): array {
-		$processed = $this->getAll();
-		$exclude   = [];
+		$table = $this->table;
 
-		foreach ( $processed as $record ) {
-			$exclude[] = $record->getAttachmentId();
-		}
+		$sql = $this->wpdb->prepare(
+			"SELECT p.ID FROM {$this->wpdb->posts} p
+            WHERE p.post_type = 'attachment'
+            AND p.post_mime_type IN ('image/jpeg','image/png','image/gif')
+            AND p.post_status = 'inherit'
+            AND p.ID NOT IN (
+                SELECT DISTINCT attachment_id FROM {$table}
+                WHERE status IN ('done','processing')
+            )
+            ORDER BY p.ID ASC
+            LIMIT %d",
+			$limit
+		);
 
-		$excludeSql = empty( $exclude )
-			? ''
-			: 'AND p.ID NOT IN (' . implode( ',', array_map( 'intval', $exclude ) ) . ')';
+		$results = $this->wpdb->get_col( $sql );
 
-		$sql = "SELECT p.ID FROM {$this->wpdb->posts} p
-                WHERE p.post_type = 'attachment'
-                AND p.post_mime_type IN ('image/jpeg','image/png','image/gif')
-                AND p.post_status = 'inherit'
-                {$excludeSql}
-                ORDER BY p.ID ASC
-                LIMIT " . (int) $limit;
+		return is_array( $results ) ? array_map( 'intval', $results ) : [];
+	}
+
+	public function getFailedAttachmentIds( int $limit = 50 ): array {
+		$table = $this->table;
+
+		$sql = $this->wpdb->prepare(
+			"SELECT attachment_id FROM {$table}
+            WHERE status = 'failed'
+            GROUP BY attachment_id
+            ORDER BY MAX(id) ASC
+            LIMIT %d",
+			$limit
+		);
 
 		$results = $this->wpdb->get_col( $sql );
 

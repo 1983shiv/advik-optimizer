@@ -32,7 +32,11 @@ class ImageController extends AbstractController {
 		$pending   = $this->repository->getPending();
 
 		if ( empty( $pending ) ) {
-			$attachmentIds = $this->getUnprocessedAttachmentIds();
+			$attachmentIds = array_merge(
+				$this->getUnprocessedAttachmentIds(),
+				$this->repository->getFailedAttachmentIds( 20 )
+			);
+			$attachmentIds = array_unique( $attachmentIds );
 			$count         = count( $attachmentIds );
 
 			if ( 0 === $count ) {

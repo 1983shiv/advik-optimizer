@@ -50,22 +50,31 @@ class ServeCacheListener {
 		}
 
 		if ( ! $this->eligibility->isEligible() ) {
+			$this->flushBuffer();
 			return;
 		}
 
 		$html = ob_get_clean();
 
-		if ( false === $html || empty( $html ) ) {
+		if ( false === $html || '' === $html ) {
 			return;
 		}
 
 		$httpCode = http_response_code();
 
 		if ( 200 !== $httpCode ) {
+			echo $html;
 			return;
 		}
 
 		$this->writeService->put( $this->cacheKey, $html );
+		echo $html;
+	}
+
+	private function flushBuffer(): void {
+		if ( ob_get_level() > 0 ) {
+			ob_end_flush();
+		}
 	}
 
 	private function buildCacheKey(): string {

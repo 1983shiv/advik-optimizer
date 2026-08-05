@@ -16,17 +16,17 @@
 ---
 
 ## Phase 0 — Scaffolding
-- [x] `wp plugin activate advik-optimizer` succeeds with no PHP notices/warnings/deprecations.
-- [x] All 5 custom tables exist post-activation with correct schema (verified against TSD §2.6.2).
-- [x] Deactivating does not drop tables/options; uninstalling (via `uninstall.php`) does, unless "keep data" is set.
-- [x] Container resolves at least one bound interface→implementation pair (proves DI wiring works end to end).
+- [ ] `wp plugin activate advik-optimizer` succeeds with no PHP notices/warnings/deprecations.
+- [ ] All 5 custom tables exist post-activation with correct schema (verified against TSD §2.6.2).
+- [ ] Deactivating does not drop tables/options; uninstalling (via `uninstall.php`) does, unless "keep data" is set.
+- [ ] Container resolves at least one bound interface→implementation pair (proves DI wiring works end to end).
 
 ## Phase 1 — Cache
 - FR-1.1: A logged-out GET request to a cacheable URL returns a response served from `FileCacheStore`, verifiable via a debug header (`X-Advik-Cache: HIT`). Second request to same URL after edit shows `MISS` then `HIT`.
 - FR-1.3: Publishing/updating a post purges exactly the URLs related to that post (permalink, taxonomy archives it belongs to, front page if configured) — verified by cache log entries, not a full-site flush, unless scope=all requested.
 - FR-1.4: A logged-in user, a WooCommerce cart page, and any URL matching a configured exclusion pattern never return `HIT`.
 - FR-1.5: Warm job populates cache for all sitemap URLs within the configured cron window; failures are logged, not silent.
-- [x] REST, UI, and WP-CLI purge/warm actions produce identical results (same purge scope logic reused, not reimplemented three times — DRY check).
+- [ ] REST, UI, and WP-CLI purge/warm actions produce identical results (same purge scope logic reused, not reimplemented three times — DRY check).
 
 ## Phase 2 — Dashboard / Vitals
 - FR-4.1: Dashboard renders all 4 score rings from real aggregated data within 2s on a cache-warm admin page load.
@@ -44,6 +44,17 @@
 - FR-3.1: Minified output is byte-for-byte functionally equivalent (site renders/behaves identically) on a WPCS-clean test theme; console has zero new JS errors versus pre-minify baseline.
 - FR-3.3: Critical CSS scan produces a non-empty rule for at least the homepage and one single-post template; inlined CSS matches the stored rule.
 - [ ] Deliberately introducing a JS handle that breaks on defer triggers `MinifyRollbackGuard` and surfaces an admin notice within the defined error-count threshold.
+- FR-9.1/9.2 *(from competitive analysis, doc 12)*: A page containing `<!--advik-noptimize-->...<!--/advik-noptimize-->` around a fragment leaves that fragment untouched while optimizing the rest; a page containing `<!-- advik-noptimize-page -->` anywhere is skipped in its entirety.
+- FR-10.1–10.3 *(doc 12)*: Each Google Fonts mode (Remove / Combine & Link / Combine & Async) produces the documented `<link>`/inline-loading behavior on a test page with multiple Google Fonts `<link>` tags; default mode is Combine & Link.
+- FR-11.1 *(doc 12 §9.8)*: Enabling emoji cleanup removes exactly the 7 documented core hooks/filters; no emoji-related script/style/DNS-prefetch appears in output.
+- FR-11.2 *(doc 12 §9.9)*: Enabling query-string stripping removes both `?ver=` and `?v=` parameters from static asset URLs via `script_loader_src`/`style_loader_src`.
+- FR-11.3 *(doc 12)*: Enabling block-CSS removal dequeues Gutenberg's default block/global styles on a test page using only core blocks with no visual breakage on a standard theme.
+- FR-16 *(doc 12 §9.1, expanded)*: Test each item in the full showstopper/skip list individually — page-builder preview query keys (Elementor, Divi, WPBakery, Beaver Builder, Oxygen, Thrive, SiteOrigin, at minimum), `is_login()`, `is_customize_preview()`, `is_feed()`, `is_embed()`, malformed/AMP/XSL content, the `DONOTMINIFY` constant, and the per-post "disable optimization" meta option — each must independently and correctly bypass Minify processing.
+- FR-18 *(doc 12)*: With `mbstring` available and the setting enabled, minifying content containing non-ASCII characters (test with at least Hindi and one other non-Latin script, matching the target Indian developer/content audience) produces correctly preserved output, not mangled bytes.
+- **[Security, doc 12 §5 — do not skip]**: Submitting a deliberate XSS payload (e.g., `</textarea><script>alert(1)</script>`) into the critical-CSS manual override text area is neutralized on save and on display; verified as its own explicit test case, not inferred from general sanitization coverage. Only `manage_advik_optimizer` capability holders can write to this field, and the save action is nonce-protected.
+
+## Phase 4 (Cache-adjacent items requiring earlier work — cross-check before closing Phase 1)
+- [ ] Confirm FR-19 (External Cache Cooperation, doc 12 §9.4) and the atomic rename-based cache clear (doc 12 §9.3) were completed as part of Phase 1's Definition of Done. If Phase 1 was already closed out before doc 12 existed, treat these two items as an explicit backfill task now rather than silently skipping them — they affect correctness, not just nice-to-have polish.
 
 ## Phase 5 — SEO
 - FR-5.1/5.2: A test post's rendered `<head>` contains correct title/description/OG/schema matching the configured template, validated with Google's Rich Results Test (no errors).

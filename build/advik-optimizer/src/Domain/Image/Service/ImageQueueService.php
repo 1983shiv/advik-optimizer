@@ -113,6 +113,14 @@ class ImageQueueService {
 		} catch ( \Throwable $e ) {
 			$this->repository->update( $recordId, [ 'status' => 'failed' ] );
 
+			error_log(
+				sprintf(
+					'[Advik Optimizer] Image optimization failed for attachment %d: %s',
+					$attachmentId,
+					$e->getMessage()
+				)
+			);
+
 			return [
 				'id' => $recordId,
 				'status' => 'failed',

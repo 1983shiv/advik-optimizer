@@ -68,6 +68,14 @@ Scope:
 - `MinifyRollbackGuard` safe-mode logic.
 - Screen 6 (Settings: Minify).
 - Dashboard "JS/CSS Reduced" stat tile goes live.
+- **[Added from competitive analysis, doc 12]** FR-9: `<!--advik-noptimize-->...<!--/advik-noptimize-->` fragment wrapper **and** a full-page `<!-- advik-noptimize-page -->` marker (doc 12 §9.1) — implement both, not just the fragment version.
+- **[Added from competitive analysis, doc 12]** FR-10: Google Fonts optimization (Remove / Combine & Link / Combine & Async, default Combine & Link).
+- **[Added from competitive analysis, doc 12]** FR-11: emoji cruft removal (the exact 7-hook list in doc 12 §9.8), query-string stripping (handle both `?ver=` and `?v=`, doc 12 §9.9), WP block/global-styles removal toggle.
+- **[Added from competitive analysis, doc 12]** FR-16: context-aware skip logic, built against the **full** showstopper list from doc 12 §9.1 (page-builder preview query keys, `is_login()`/`is_customize_preview()`/`is_feed()`/`is_embed()`, malformed/AMP/XSL content detection, the `DONOTMINIFY` cross-plugin constant, and a per-post "disable optimization" meta option) — build the complete list now rather than a partial one, since retrofitting later means re-testing every builder/theme combination again.
+- **[Added from competitive analysis, doc 12]** FR-18: mbstring-safe minification toggle.
+- **[Security — doc 12 §5, high priority]** Any raw CSS text-area input (manual critical-CSS override) must use CSS-appropriate sanitization on save and escaping on display, capability + nonce gated, with a deliberate XSS-payload test case as part of this phase's test suite — this is the exact vector that caused multiple real CVEs in the reference plugin.
+
+**Exit demo (expanded):** In addition to the original minify/critical-CSS demo — verify a page-builder preview URL (e.g., `?elementor-preview=123`) is correctly skipped; verify the full-page and fragment noptimize markers both work; verify Google Fonts mode switching produces the expected `<link>`/inline behavior; verify emoji/query-string cleanup toggles work; verify the critical-CSS textarea rejects/escapes an XSS payload test string.
 
 **Exit demo:** Assets are minified and served correctly with no console errors on a real theme; deliberately breaking a script triggers rollback and an admin notice.
 

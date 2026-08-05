@@ -35,6 +35,7 @@ class Activator {
 
 		self::upgradeCwvMetricsEnum( $wpdb );
 		self::upgradeAuditsTable( $wpdb );
+		self::upgradeCriticalCssTable( $wpdb );
 
 		update_option( self::VERSION_OPTION, ADVIK_OPTIMIZER_VERSION );
 	}
@@ -103,6 +104,15 @@ class Activator {
 		$prefix         = $wpdb->prefix;
 
 		$tables = [
+
+			"CREATE TABLE {$prefix}advik_critical_css (
+                id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+                template VARCHAR(64) NOT NULL,
+                css LONGTEXT NOT NULL,
+                created_at DATETIME NOT NULL,
+                PRIMARY KEY (id),
+                UNIQUE KEY template (template)
+            ) {$charsetCollate};",
 			"CREATE TABLE {$prefix}advik_cwv_metrics (
                 id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
                 url_hash CHAR(32) NOT NULL,
@@ -216,13 +226,36 @@ class Activator {
 		}
 	}
 
+	private static function upgradeCriticalCssTable( $wpdb ): void {
+		$table = $wpdb->prefix . 'advik_critical_css';
+
+		if ( $table === $wpdb->get_var( "SHOW TABLES LIKE '{$table}'" ) ) {
+			return;
+		}
+
+		$charsetCollate = $wpdb->get_charset_collate();
+
+		$sql = "CREATE TABLE {$table} (
+            id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+            template VARCHAR(64) NOT NULL,
+            css LONGTEXT NOT NULL,
+            created_at DATETIME NOT NULL,
+            PRIMARY KEY (id),
+            UNIQUE KEY template (template)
+        ) {$charsetCollate};";
+
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		dbDelta( $sql );
+	}
+
 	private static function createUploadDir(): void {
 		$uploadDir    = wp_upload_dir();
 		$baseDir      = $uploadDir['basedir'] . '/advik-optimizer';
 		$cacheDir     = $baseDir . '/cache';
 		$assetsDir    = $baseDir . '/assets';
+		$cacheAssets  = $cacheDir . '/assets';
 
-		foreach ( [ $baseDir, $cacheDir, $assetsDir ] as $dir ) {
+		foreach ( [ $baseDir, $cacheDir, $assetsDir, $cacheAssets ] as $dir ) {
 			if ( ! is_dir( $dir ) ) {
 				wp_mkdir_p( $dir );
 			}

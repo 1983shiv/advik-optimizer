@@ -49,7 +49,7 @@
         <div class="advik-field">
             <label for="minify_exclude_css"><?php echo esc_html__( 'CSS handles to exclude', 'advik-optimizer' ); ?></label>
             <input type="text" id="minify_exclude_css" name="minify_exclude_css" class="advik-text-input"
-                value="<?php echo esc_attr( is_string( $settings['minify_exclude_css'] ?? '' ) ? $settings['minify_exclude_css'] : '' ); ?>"
+                value="<?php echo esc_attr( $settings['minify_exclude_css'] ?? '' ); ?>"
                 placeholder="e.g. admin-bar, dashicons">
             <p class="advik-field-help"><?php echo esc_html__( 'Comma-separated list of style handles to skip minification.', 'advik-optimizer' ); ?></p>
         </div>
@@ -57,7 +57,7 @@
         <div class="advik-field">
             <label for="minify_exclude_js"><?php echo esc_html__( 'JavaScript handles to exclude', 'advik-optimizer' ); ?></label>
             <input type="text" id="minify_exclude_js" name="minify_exclude_js" class="advik-text-input"
-                value="<?php echo esc_attr( is_string( $settings['minify_exclude_js'] ?? '' ) ? $settings['minify_exclude_js'] : '' ); ?>"
+                value="<?php echo esc_attr( $settings['minify_exclude_js'] ?? '' ); ?>"
                 placeholder="e.g. jquery-core, jquery-migrate">
             <p class="advik-field-help"><?php echo esc_html__( 'Comma-separated list of script handles to skip minification.', 'advik-optimizer' ); ?></p>
         </div>

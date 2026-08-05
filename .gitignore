@@ -5,3 +5,4 @@ assets/admin/dist/
 *.log
 .env.testing
 .phpunit.result.cache
+/doc/advik-optimizer-competitive-analysis-autoptimize.md
