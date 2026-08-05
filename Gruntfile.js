@@ -1,4 +1,25 @@
+/**
+ * Gruntfile.js — Production build orchestrator for Advik Booking.
+ *
+ * Tasks (run in order via `npm run package`):
+ *   1. clean      – Delete the dist/ output directory.
+ *   2. wp-scripts – Compile JS/CSS with Webpack (delegates to npm run build).
+ *   3. copy       – Copy plugin files to dist/advik-booking/, excluding dev assets.
+ *   4. cssmin     – Minify public-facing CSS into dist/.
+ *   5. uglify     – Minify PHP-enqueued JS bundles that are not Webpack output.
+ *   6. makepot    – Generate / update the .pot translation template.
+ *   7. compress   – Create dist/advik-booking-{version}.zip ready for distribution.
+ *
+ * @package
+ */
+
+/* global module, require */
+'use strict';
+
 module.exports = function (grunt) {
+  // Auto-load all grunt-contrib-* and grunt-wp-* tasks.
+	require( 'load-grunt-tasks' )( grunt );
+
   const pkg = grunt.file.readJSON('package.json');
   const buildDir = 'build/advik-optimizer';
 

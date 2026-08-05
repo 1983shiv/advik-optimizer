@@ -13,6 +13,10 @@ class wpdb {
 		return 1;
 	}
 
+	public function replace( string $table, array $data, array $formats = [] ): int|false {
+		return 1;
+	}
+
 	public function prepare( string $query, ...$args ): string|false {
 		$sql = $query;
 		foreach ( $args as $arg ) {

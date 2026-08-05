@@ -1,5 +1,6 @@
 {
   "name": "advik-optimizer-assets",
+  "version": "0.1.0",
   "scripts": {
     "build": "npx grunt release",
     "dev": "vite build --watch",

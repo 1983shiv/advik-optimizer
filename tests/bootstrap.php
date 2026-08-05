@@ -12,6 +12,8 @@ $mockDir = dirname(__DIR__) . '/tests/mock';
 
 require $mockDir . '/class-wpdb.php';
 require $mockDir . '/class-wp-error.php';
+require $mockDir . '/class-wp-styles.php';
+require $mockDir . '/class-wp-scripts.php';
 require $mockDir . '/functions.php';
 
 define( 'OBJECT', 'OBJECT' );

@@ -112,6 +112,10 @@ function wp_remote_retrieve_response_code( $response ): int {
 function do_action( ...$args ): void {
 }
 
+function add_action( string $hook, callable $callback, int $priority = 10, int $accepted_args = 1 ): void {
+	MockWP::set( '_add_action_calls', ( MockWP::get( '_add_action_calls' ) ?? 0 ) + 1 );
+}
+
 function apply_filters( string $hook, mixed $value, mixed ...$args ): mixed {
 	return $value;
 }
@@ -149,6 +153,10 @@ function wp_unslash( mixed $value ): mixed {
 }
 
 function esc_url_raw( string $url ): string {
+	return $url;
+}
+
+function esc_url( string $url, array $protocols = [], string $context = 'display' ): string {
 	return $url;
 }
 
