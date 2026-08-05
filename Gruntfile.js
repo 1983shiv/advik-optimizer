@@ -17,9 +17,6 @@
 'use strict';
 
 module.exports = function (grunt) {
-  // Auto-load all grunt-contrib-* and grunt-wp-* tasks.
-	require( 'load-grunt-tasks' )( grunt );
-
   const pkg = grunt.file.readJSON('package.json');
   const buildDir = 'build/advik-optimizer';
 
