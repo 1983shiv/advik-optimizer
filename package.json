@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "build": "npx grunt release",
+    "package": "npx grunt package",
     "dev": "vite build --watch",
     "zip": "node build.js",
     "env": "wp-env start",
@@ -16,6 +17,8 @@
     "grunt-contrib-clean": "^2.0.1",
     "grunt-contrib-compress": "^2.0.0",
     "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-cssmin": "^5.0.0",
+    "grunt-contrib-uglify": "^5.2.2",
     "grunt-wp-i18n": "^1.0.4",
     "vite": "^8.1.5"
   }

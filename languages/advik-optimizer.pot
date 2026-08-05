@@ -1,0 +1,764 @@
+# Copyright (C) 2026 AdvikLabs
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Advik Optimizer 0.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/advik-optimizer\n"
+"POT-Creation-Date: 2026-08-05 08:25:35+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2026-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"X-Generator: grunt-wp-i18n 1.0.4\n"
+
+#: build/advik-optimizer/src/Admin/Controller/AbstractController.php:11
+#: build/advik-optimizer/src/Domain/Minify/Service/MinifyRollbackGuard.php:98
+#: build/advik-optimizer/src/Plugin.php:424
+#: build/advik-optimizer/src/Plugin.php:591
+#: src/Admin/Controller/AbstractController.php:11
+#: src/Domain/Minify/Service/MinifyRollbackGuard.php:98 src/Plugin.php:424
+#: src/Plugin.php:591
+msgid "You do not have sufficient permissions."
+msgstr ""
+
+#: build/advik-optimizer/src/Admin/Controller/AbstractController.php:17
+#: src/Admin/Controller/AbstractController.php:17
+msgid "Security check failed."
+msgstr ""
+
+#: build/advik-optimizer/src/Admin/Controller/DashboardController.php:73
+#: src/Admin/Controller/DashboardController.php:73
+msgid "Scan complete &mdash; dashboard updated."
+msgstr ""
+
+#: build/advik-optimizer/src/Admin/Controller/DashboardController.php:75
+#: src/Admin/Controller/DashboardController.php:75
+msgid ""
+"Scan finished but no data was returned. Configure a PageSpeed Insights API "
+"key on the <a "
+"href=\"admin.php?page=advik-optimizer-settings&tab=vitals\">Core Web Vitals "
+"settings tab</a> to enable lab scans."
+msgstr ""
+
+#: build/advik-optimizer/src/Admin/Controller/DashboardController.php:77
+#: src/Admin/Controller/DashboardController.php:77
+msgid ""
+"Scan finished but the PageSpeed Insights API returned no data. Make sure "
+"your site is publicly accessible."
+msgstr ""
+
+#: build/advik-optimizer/src/Admin/Controller/ImageController.php:93
+#: src/Admin/Controller/ImageController.php:93
+msgid "Invalid attachment ID."
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "Advik Optimizer"
+msgstr ""
+
+#: build/advik-optimizer/src/Admin/Menu/AdminMenuRegistrar.php:33
+#: build/advik-optimizer/src/Admin/Menu/AdminMenuRegistrar.php:34
+#: src/Admin/Menu/AdminMenuRegistrar.php:33
+#: src/Admin/Menu/AdminMenuRegistrar.php:34
+msgid "Dashboard"
+msgstr ""
+
+#: build/advik-optimizer/src/Admin/Menu/AdminMenuRegistrar.php:42
+#: build/advik-optimizer/src/Admin/Menu/AdminMenuRegistrar.php:43
+#: src/Admin/Menu/AdminMenuRegistrar.php:42
+#: src/Admin/Menu/AdminMenuRegistrar.php:43
+msgid "Settings"
+msgstr ""
+
+#: build/advik-optimizer/src/Admin/View/SettingsView.php:20
+#: src/Admin/View/SettingsView.php:20
+msgid "Cache"
+msgstr ""
+
+#: build/advik-optimizer/src/Admin/View/SettingsView.php:21
+#: src/Admin/View/SettingsView.php:21
+msgid "Images"
+msgstr ""
+
+#: build/advik-optimizer/src/Admin/View/SettingsView.php:22
+#: src/Admin/View/SettingsView.php:22
+msgid "Minify"
+msgstr ""
+
+#: build/advik-optimizer/src/Admin/View/SettingsView.php:23
+#: src/Admin/View/SettingsView.php:23
+msgid "Core Web Vitals"
+msgstr ""
+
+#: build/advik-optimizer/src/Admin/View/SettingsView.php:24
+#: build/advik-optimizer/templates/admin/dashboard.php:44
+#: src/Admin/View/SettingsView.php:24 templates/admin/dashboard.php:44
+msgid "SEO"
+msgstr ""
+
+#: build/advik-optimizer/src/Admin/View/SettingsView.php:25
+#: src/Admin/View/SettingsView.php:25
+msgid "CDN & Database"
+msgstr ""
+
+#: build/advik-optimizer/src/Domain/Minify/Service/MinifyRollbackGuard.php:83
+#: src/Domain/Minify/Service/MinifyRollbackGuard.php:83
+#. translators: %s: URL where the error was detected
+msgid ""
+"Minification was paused on %s after we detected a script error. Review and "
+"re-enable."
+msgstr ""
+
+#: build/advik-optimizer/src/Domain/Minify/Service/MinifyRollbackGuard.php:83
+#: src/Domain/Minify/Service/MinifyRollbackGuard.php:83
+msgid ""
+"Minification was paused after we detected a script error. Review and "
+"re-enable."
+msgstr ""
+
+#: build/advik-optimizer/src/Domain/Minify/Service/MinifyRollbackGuard.php:91
+#: src/Domain/Minify/Service/MinifyRollbackGuard.php:91
+msgid "Re-enable Minification"
+msgstr ""
+
+#: build/advik-optimizer/src/Domain/Vitals/Service/AlertService.php:44
+#: src/Domain/Vitals/Service/AlertService.php:44
+#. translators: %s: site name
+msgid "[Advik Optimizer] Performance alert for %s"
+msgstr ""
+
+#: build/advik-optimizer/src/Domain/Vitals/Service/AlertService.php:49
+#: src/Domain/Vitals/Service/AlertService.php:49
+msgid ""
+"The following Core Web Vitals metrics have exceeded their configured "
+"thresholds:"
+msgstr ""
+
+#: build/advik-optimizer/src/Domain/Vitals/Service/AlertService.php:51
+#: src/Domain/Vitals/Service/AlertService.php:51
+#. translators: %s: device type (mobile/desktop)
+msgid "Device: %s"
+msgstr ""
+
+#: build/advik-optimizer/src/Domain/Vitals/Service/AlertService.php:68
+#: src/Domain/Vitals/Service/AlertService.php:68
+msgid "Please check your site performance on the Advik Optimizer dashboard."
+msgstr ""
+
+#: build/advik-optimizer/src/Plugin.php:77
+#: build/advik-optimizer/templates/admin/settings-cache.php:11
+#: src/Plugin.php:77 templates/admin/settings-cache.php:11
+msgid "Enable page caching"
+msgstr ""
+
+#: build/advik-optimizer/src/Plugin.php:85 src/Plugin.php:85
+msgid "Cache TTL (seconds)"
+msgstr ""
+
+#: build/advik-optimizer/src/Plugin.php:94
+#: build/advik-optimizer/templates/admin/settings-cache.php:23
+#: src/Plugin.php:94 templates/admin/settings-cache.php:23
+msgid "Never cache pages for logged-in visitors"
+msgstr ""
+
+#: build/advik-optimizer/src/Plugin.php:102
+#: build/advik-optimizer/templates/admin/settings-cache.php:27
+#: src/Plugin.php:102 templates/admin/settings-cache.php:27
+msgid "Never cache these URLs"
+msgstr ""
+
+#: build/advik-optimizer/src/Plugin.php:111 src/Plugin.php:111
+msgid "Automatically rebuild cache after it is cleared"
+msgstr ""
+
+#: build/advik-optimizer/src/Plugin.php:121 src/Plugin.php:121
+msgid "Enable Core Web Vitals tracking"
+msgstr ""
+
+#: build/advik-optimizer/src/Plugin.php:130 src/Plugin.php:130
+msgid "RUM sampling rate (%)"
+msgstr ""
+
+#: build/advik-optimizer/src/Plugin.php:138
+#: build/advik-optimizer/templates/admin/settings-vitals.php:19
+#: src/Plugin.php:138 templates/admin/settings-vitals.php:19
+msgid "PageSpeed Insights API Key"
+msgstr ""
+
+#: build/advik-optimizer/src/Plugin.php:146 src/Plugin.php:146
+msgid "LCP alert threshold (s)"
+msgstr ""
+
+#: build/advik-optimizer/src/Plugin.php:154 src/Plugin.php:154
+msgid "CLS alert threshold"
+msgstr ""
+
+#: build/advik-optimizer/src/Plugin.php:162 src/Plugin.php:162
+msgid "INP alert threshold (ms)"
+msgstr ""
+
+#: build/advik-optimizer/src/Plugin.php:171 src/Plugin.php:171
+msgid "Email alert"
+msgstr ""
+
+#: build/advik-optimizer/src/Plugin.php:179 src/Plugin.php:179
+msgid "Alert email address"
+msgstr ""
+
+#: build/advik-optimizer/src/Plugin.php:188 src/Plugin.php:188
+msgid "Webhook alert"
+msgstr ""
+
+#: build/advik-optimizer/src/Plugin.php:196
+#: build/advik-optimizer/templates/admin/settings-vitals.php:68
+#: src/Plugin.php:196 templates/admin/settings-vitals.php:68
+msgid "Webhook URL"
+msgstr ""
+
+#: build/advik-optimizer/src/Plugin.php:206
+#: build/advik-optimizer/templates/admin/settings-images.php:16
+#: src/Plugin.php:206 templates/admin/settings-images.php:16
+msgid "Enable image optimization"
+msgstr ""
+
+#: build/advik-optimizer/src/Plugin.php:214 src/Plugin.php:214
+msgid "Image compression quality"
+msgstr ""
+
+#: build/advik-optimizer/src/Plugin.php:222 src/Plugin.php:222
+msgid "Image output format"
+msgstr ""
+
+#: build/advik-optimizer/src/Plugin.php:231
+#: build/advik-optimizer/templates/admin/settings-images.php:36
+#: src/Plugin.php:231 templates/admin/settings-images.php:36
+msgid "Enable lazy loading"
+msgstr ""
+
+#: build/advik-optimizer/src/Plugin.php:241
+#: build/advik-optimizer/templates/admin/settings-minify.php:16
+#: src/Plugin.php:241 templates/admin/settings-minify.php:16
+msgid "Enable asset minification"
+msgstr ""
+
+#: build/advik-optimizer/src/Plugin.php:250
+#: build/advik-optimizer/templates/admin/settings-minify.php:25
+#: src/Plugin.php:250 templates/admin/settings-minify.php:25
+msgid "Minify CSS"
+msgstr ""
+
+#: build/advik-optimizer/src/Plugin.php:259
+#: build/advik-optimizer/templates/admin/settings-minify.php:33
+#: src/Plugin.php:259 templates/admin/settings-minify.php:33
+msgid "Minify JavaScript"
+msgstr ""
+
+#: build/advik-optimizer/src/Plugin.php:268
+#: build/advik-optimizer/templates/admin/settings-minify.php:41
+#: src/Plugin.php:268 templates/admin/settings-minify.php:41
+msgid "Minify HTML"
+msgstr ""
+
+#: build/advik-optimizer/src/Plugin.php:276 src/Plugin.php:276
+msgid "CSS handles to exclude from minification"
+msgstr ""
+
+#: build/advik-optimizer/src/Plugin.php:284 src/Plugin.php:284
+msgid "JavaScript handles to exclude from minification"
+msgstr ""
+
+#: build/advik-optimizer/src/Plugin.php:451 src/Plugin.php:451
+msgid "Every hour"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:10
+#: templates/admin/dashboard.php:10
+msgid "Optimizer Overview"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:16
+#: templates/admin/dashboard.php:16
+msgid "All systems green"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:18
+#: templates/admin/dashboard.php:18
+msgid "No data yet. Run a scan."
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:21
+#: templates/admin/dashboard.php:21
+msgid "Live"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:25
+#: templates/admin/dashboard.php:25
+msgid "Run Scan Now"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:31
+#: templates/admin/dashboard.php:31
+msgid "Mobile"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:32
+#: templates/admin/dashboard.php:32
+msgid "Desktop"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:44
+#: templates/admin/dashboard.php:44
+msgid "Performance"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:44
+#: templates/admin/dashboard.php:44
+msgid "Accessibility"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:44
+#: templates/admin/dashboard.php:44
+msgid "Best Practices"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:64
+#: templates/admin/dashboard.php:64
+msgid "Page Load Trend"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:70
+#: build/advik-optimizer/templates/admin/dashboard.php:71
+#: build/advik-optimizer/templates/admin/dashboard.php:72
+#: templates/admin/dashboard.php:70 templates/admin/dashboard.php:71
+#: templates/admin/dashboard.php:72
+msgid "days"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:135
+#: templates/admin/dashboard.php:135
+msgid "Actionable Insights"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:177
+#: templates/admin/dashboard.php:177
+msgid ""
+"API key is configured. Click \"Run Scan Now\" to fetch data from PageSpeed "
+"Insights."
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:178
+#: templates/admin/dashboard.php:178
+msgid ""
+"Note: your site must be publicly accessible for Google's servers to reach "
+"it."
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:180
+#: templates/admin/dashboard.php:180
+msgid "Scores appear here after a successful scan."
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:181
+#: templates/admin/dashboard.php:181
+msgid "Configure a PageSpeed Insights API key on the Core Web Vitals settings tab"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:182
+#: templates/admin/dashboard.php:182
+msgid "to enable automated lab scans, or wait for real-user (RUM) data."
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:188
+#: templates/admin/dashboard.php:188
+msgid "Optimizations Active"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:192
+#: templates/admin/dashboard.php:192
+msgid "Cache Hit Rate"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:196
+#: templates/admin/dashboard.php:196
+msgid "Images Saved"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:200
+#: templates/admin/dashboard.php:200
+msgid "JS/CSS Reduced"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:206
+#: templates/admin/dashboard.php:206
+msgid "Built for Every Workload"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:207
+#: templates/admin/dashboard.php:207
+msgid "WooCommerce Stores"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:208
+#: templates/admin/dashboard.php:208
+msgid "News &amp; Publishing"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:209
+#: templates/admin/dashboard.php:209
+msgid "Agency Clients"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/dashboard.php:210
+#: templates/admin/dashboard.php:210
+msgid "Portfolio &amp; SaaS"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/placeholder.php:3
+#: templates/admin/placeholder.php:3
+msgid ""
+"Coming soon. The dashboard and settings screens will appear here once the "
+"plugin is fully built."
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-cache.php:3
+#: build/advik-optimizer/templates/admin/settings-images.php:3
+#: build/advik-optimizer/templates/admin/settings-minify.php:3
+#: build/advik-optimizer/templates/admin/settings-vitals.php:3
+#: templates/admin/settings-cache.php:3 templates/admin/settings-images.php:3
+#: templates/admin/settings-minify.php:3 templates/admin/settings-vitals.php:3
+msgid "Settings saved."
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-cache.php:6
+#: templates/admin/settings-cache.php:6
+msgid "Page Caching"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-cache.php:13
+#: templates/admin/settings-cache.php:13
+msgid ""
+"Serves a saved copy of your pages to visitors instead of rebuilding them on "
+"every request."
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-cache.php:18
+#: templates/admin/settings-cache.php:18
+msgid "Exclusion Rules"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-cache.php:29
+#: templates/admin/settings-cache.php:29
+msgid "One pattern per line, e.g. /cart/*"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-cache.php:34
+#: templates/admin/settings-cache.php:34
+msgid "Cache Warming"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-cache.php:39
+#: templates/admin/settings-cache.php:39
+msgid "Automatically rebuild cache after it's cleared"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-cache.php:47
+#: templates/admin/settings-cache.php:47
+msgid "Purge Cache Now"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-cache.php:50
+#: build/advik-optimizer/templates/admin/settings-images.php:45
+#: build/advik-optimizer/templates/admin/settings-images.php:138
+#: build/advik-optimizer/templates/admin/settings-minify.php:107
+#: build/advik-optimizer/templates/admin/settings-vitals.php:78
+#: templates/admin/settings-cache.php:50 templates/admin/settings-images.php:45
+#: templates/admin/settings-images.php:138
+#: templates/admin/settings-minify.php:107
+#: templates/admin/settings-vitals.php:78
+msgid "Save Settings"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-images.php:6
+#: templates/admin/settings-images.php:6
+msgid "Bulk optimization complete. %d images processed."
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-images.php:10
+#: templates/admin/settings-images.php:10
+msgid "Image Compression"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-images.php:18
+#: templates/admin/settings-images.php:18
+msgid "Automatically converts uploaded JPEG, PNG, and GIF images to WebP format."
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-images.php:22
+#: templates/admin/settings-images.php:22
+msgid "Compression quality"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-images.php:29
+#: templates/admin/settings-images.php:29
+msgid "Higher quality keeps more detail; lower quality saves more space."
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-images.php:38
+#: templates/admin/settings-images.php:38
+msgid ""
+"Adds loading=\"lazy\" to content images. Featured images are excluded "
+"automatically."
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-images.php:51
+#: templates/admin/settings-images.php:51
+msgid "Media Library"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-images.php:54
+#: templates/admin/settings-images.php:54
+msgid "Bulk Optimize Media Library"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-images.php:57
+#: build/advik-optimizer/templates/admin/settings-images.php:105
+#: templates/admin/settings-images.php:57
+#: templates/admin/settings-images.php:105
+msgid "Optimizing…"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-images.php:67
+#: templates/admin/settings-images.php:67
+msgid "Image"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-images.php:68
+#: templates/admin/settings-images.php:68
+msgid "Original Size"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-images.php:69
+#: templates/admin/settings-images.php:69
+msgid "Optimized Size"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-images.php:70
+#: templates/admin/settings-images.php:70
+msgid "Savings"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-images.php:71
+#: templates/admin/settings-images.php:71
+msgid "Status"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-images.php:72
+#: templates/admin/settings-images.php:72
+msgid "Action"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-images.php:86
+#: templates/admin/settings-images.php:86
+msgid "Attachment deleted"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-images.php:104
+#: templates/admin/settings-images.php:104
+msgid "Pending"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-images.php:106
+#: templates/admin/settings-images.php:106
+msgid "Optimized"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-images.php:107
+#: templates/admin/settings-images.php:107
+msgid "Failed"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-images.php:108
+#: templates/admin/settings-images.php:108
+msgid "Restored"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-images.php:117
+#: templates/admin/settings-images.php:117
+msgid "Restore original"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-images.php:120
+#: templates/admin/settings-images.php:120
+msgid "Couldn't process this image."
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-images.php:131
+#: templates/admin/settings-images.php:131
+msgid ""
+"No images have been processed yet. Upload images and they'll be optimized "
+"automatically."
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-minify.php:6
+#: templates/admin/settings-minify.php:6
+msgid "Minification re-enabled."
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-minify.php:10
+#: templates/admin/settings-minify.php:10
+msgid "Asset Minification"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-minify.php:18
+#: templates/admin/settings-minify.php:18
+msgid "Minify CSS, JavaScript, and HTML to reduce page size and improve load times."
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-minify.php:47
+#: templates/admin/settings-minify.php:47
+msgid "Exclude from minification"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-minify.php:50
+#: templates/admin/settings-minify.php:50
+msgid "CSS handles to exclude"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-minify.php:54
+#: templates/admin/settings-minify.php:54
+msgid "Comma-separated list of style handles to skip minification."
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-minify.php:58
+#: templates/admin/settings-minify.php:58
+msgid "JavaScript handles to exclude"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-minify.php:62
+#: templates/admin/settings-minify.php:62
+msgid "Comma-separated list of script handles to skip minification."
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-minify.php:67
+#: templates/admin/settings-minify.php:67
+msgid "Critical CSS"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-minify.php:73
+#: templates/admin/settings-minify.php:73
+msgid "Last scanned"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-minify.php:76
+#: templates/admin/settings-minify.php:76
+msgid "%s ago"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-minify.php:78
+#: templates/admin/settings-minify.php:78
+msgid "Never"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-minify.php:85
+#: templates/admin/settings-minify.php:85
+msgid "Rescan Now"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-minify.php:88
+#: templates/admin/settings-minify.php:88
+msgid "%d rules stored"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-minify.php:97
+#: templates/admin/settings-minify.php:97
+msgid ""
+"If a page ever looks broken after this runs, Advik Optimizer automatically "
+"pauses minification for it and notifies you here."
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-vitals.php:7
+#: templates/admin/settings-vitals.php:7
+msgid "Monitoring"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-vitals.php:9
+#: templates/admin/settings-vitals.php:9
+msgid "Track % of visitor sessions"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-vitals.php:16
+#: templates/admin/settings-vitals.php:16
+msgid ""
+"Higher sampling gives more accurate data but adds a small script to more "
+"page loads."
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-vitals.php:23
+#: templates/admin/settings-vitals.php:23
+msgid "Required for automated lab scans."
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-vitals.php:23
+#: templates/admin/settings-vitals.php:23
+msgid "Get a free key from Google Cloud Console"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-vitals.php:28
+#: templates/admin/settings-vitals.php:28
+msgid "Get notified when scores drop"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-vitals.php:30
+#: templates/admin/settings-vitals.php:30
+msgid "Alert me if LCP goes above (seconds)"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-vitals.php:35
+#: templates/admin/settings-vitals.php:35
+msgid "Alert me if CLS goes above"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-vitals.php:40
+#: templates/admin/settings-vitals.php:40
+msgid "Alert me if INP goes above (ms)"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-vitals.php:49
+#: templates/admin/settings-vitals.php:49
+msgid "Email me"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-vitals.php:53
+#: templates/admin/settings-vitals.php:53
+msgid "Email address"
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-vitals.php:57
+#: templates/admin/settings-vitals.php:57
+msgid "Leave empty to use the WordPress admin email."
+msgstr ""
+
+#: build/advik-optimizer/templates/admin/settings-vitals.php:64
+#: templates/admin/settings-vitals.php:64
+msgid "Send to a webhook"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://advik-labs.com/advik-optimizer"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"WordPress performance and SEO plugin — cache, image optimization, "
+"minification, CWV monitoring, SEO, and database cleanup."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "AdvikLabs"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://advik-labs.com"
+msgstr ""

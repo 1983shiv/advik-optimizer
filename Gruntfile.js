@@ -1,14 +1,18 @@
 /**
- * Gruntfile.js — Production build orchestrator for Advik Booking.
+ * Gruntfile.js — Production build orchestrator for Advik Optimizer.
  *
- * Tasks (run in order via `npm run package`):
- *   1. clean      – Delete the dist/ output directory.
- *   2. wp-scripts – Compile JS/CSS with Webpack (delegates to npm run build).
- *   3. copy       – Copy plugin files to dist/advik-booking/, excluding dev assets.
- *   4. cssmin     – Minify public-facing CSS into dist/.
- *   5. uglify     – Minify PHP-enqueued JS bundles that are not Webpack output.
- *   6. makepot    – Generate / update the .pot translation template.
- *   7. compress   – Create dist/advik-booking-{version}.zip ready for distribution.
+ * Tasks (run in order via `npx grunt release` or `npm run package`):
+ *   1. clean      – Delete the build/ output directory (never src/, never repo root).
+ *   2. copy       – Copy plugin files to build/advik-optimizer/, excluding dev assets.
+ *   3. cssmin     – Minify public-facing CSS inside the build copy.
+ *   4. uglify     – Minify PHP-enqueued JS bundles (admin + public beacons) inside the build copy.
+ *   5. makepot    – Generate / update the .pot translation template.
+ *   6. checktextdomain – Flag hardcoded strings missing the text-domain.
+ *   7. compress   – Create build/advik-optimizer-{version}.zip ready for distribution.
+ *
+ * Note: this project ships plain, committed JS/CSS assets (no Webpack/Vite build
+ * output step), so minification runs in place on the copied build files only —
+ * the source assets in assets/ are never modified.
  *
  * @package
  */
@@ -53,19 +57,40 @@ module.exports = function (grunt) {
       },
     },
 
-    // Step 3: zip the assembled build directory
-    compress: {
+    // Step 3: minify public-facing CSS in the build copy, in place
+    cssmin: {
       build: {
-        options: {
-          archive: 'build/advik-optimizer-<%= pkg.version %>.zip',
-        },
         files: [
-          { expand: true, cwd: 'build/', src: ['advik-optimizer/**'], dest: '' },
+          {
+            expand: true,
+            cwd: buildDir,
+            src: ['assets/**/*.css'],
+            dest: buildDir,
+            ext: '.css',
+          },
         ],
       },
     },
 
-    // Optional: generate .pot translation file
+    // Step 4: minify PHP-enqueued JS bundles in the build copy, in place
+    uglify: {
+      build: {
+        options: {
+          compress: true,
+          mangle: true,
+        },
+        files: [
+          {
+            expand: true,
+            cwd: buildDir,
+            src: ['assets/**/*.js'],
+            dest: buildDir,
+          },
+        ],
+      },
+    },
+
+    // Step 5: generate .pot translation file
     makepot: {
       target: {
         options: {
@@ -76,7 +101,7 @@ module.exports = function (grunt) {
       },
     },
 
-    // Optional: flag any hardcoded strings missing the text-domain
+    // Step 6: flag any hardcoded strings missing the text-domain
     checktextdomain: {
       standard: {
         options: {
@@ -91,14 +116,29 @@ module.exports = function (grunt) {
         ],
       },
     },
+
+    // Step 7: zip the assembled build directory
+    compress: {
+      build: {
+        options: {
+          archive: 'build/advik-optimizer-<%= pkg.version %>.zip',
+        },
+        files: [
+          { expand: true, cwd: 'build/', src: ['advik-optimizer/**'], dest: '' },
+        ],
+      },
+    },
   });
 
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-compress');
   grunt.loadNpmTasks('grunt-wp-i18n');
   grunt.loadNpmTasks('grunt-checktextdomain');
 
-  grunt.registerTask('release', ['clean:build', 'copy:build', 'compress:build']);
+  grunt.registerTask('release', ['clean:build', 'copy:build', 'cssmin:build', 'uglify:build', 'compress:build']);
+  grunt.registerTask('package', ['clean:build', 'copy:build', 'cssmin:build', 'uglify:build', 'makepot', 'checktextdomain', 'compress:build']);
   grunt.registerTask('i18n', ['makepot', 'checktextdomain']);
 };
