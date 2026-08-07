@@ -24,6 +24,7 @@ class MinifyRollbackGuard {
 
 		$nonce   = wp_create_nonce( 'advik_minify_report_error' );
 		$ajaxUrl = admin_url( 'admin-ajax.php' );
+		wp_enqueue_script( 'advik-optimizer-minify-beacon', '', [], ADVIK_OPTIMIZER_VERSION, true );
 		wp_add_inline_script(
 			'advik-optimizer-minify-beacon',
 			'window.addEventListener("error",function(e){var r=new XMLHttpRequest;r.open("POST","' . esc_js( $ajaxUrl ) . '",!0);r.setRequestHeader("Content-Type","application/x-www-form-urlencoded");r.send("action=advik_minify_report_error&nonce=' . esc_js( $nonce ) . '&url="+encodeURIComponent(location.href));});'
