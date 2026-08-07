@@ -129,4 +129,22 @@ class TestMinifyRollbackGuard extends TestCase {
 
 		$this->assertEquals( '', $output );
 	}
+
+	public function testInjectErrorBeaconEnqueuesScriptWhenActive(): void {
+		\MockWP::set( 'option_advik_optimizer_settings', [ 'module_minify' => 1 ] );
+		$guard = new MinifyRollbackGuard();
+
+		$guard->injectErrorBeacon();
+
+		$this->assertEquals( 'advik-optimizer-minify-beacon', \MockWP::get( '_last_enqueued_script' ) );
+	}
+
+	public function testInjectErrorBeaconSkipsWhenModuleDisabled(): void {
+		\MockWP::set( 'option_advik_optimizer_settings', [] );
+		$guard = new MinifyRollbackGuard();
+
+		$guard->injectErrorBeacon();
+
+		$this->assertNull( \MockWP::get( '_last_enqueued_script' ) );
+	}
 }

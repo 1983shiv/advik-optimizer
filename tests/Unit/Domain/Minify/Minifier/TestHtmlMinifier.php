@@ -46,4 +46,28 @@ class TestHtmlMinifier extends TestCase {
 
 		$this->assertEquals( $expected, $minifier->minify( $input ) );
 	}
+
+	public function testMinifyPreservesScriptContent(): void {
+		$minifier = new HtmlMinifier();
+		$input    = "<div>\n<script>\nvar url = 'https://example.com/a';\n// keep this\nvar x = 1;\n</script>\n</div>";
+		$expected = "<div><script>\nvar url = 'https://example.com/a';\n// keep this\nvar x = 1;\n</script></div>";
+
+		$this->assertEquals( $expected, $minifier->minify( $input ) );
+	}
+
+	public function testMinifyPreservesStyleContent(): void {
+		$minifier = new HtmlMinifier();
+		$input    = "<div>\n<style>\n.foo { color: red; }\n</style>\n</div>";
+		$expected = "<div><style>\n.foo { color: red; }\n</style></div>";
+
+		$this->assertEquals( $expected, $minifier->minify( $input ) );
+	}
+
+	public function testMinifyDoesNotStripHtmlCommentPlaceholderInsideScript(): void {
+		$minifier = new HtmlMinifier();
+		$input    = '<script><!--\nvar openHtml = "</div>";\n--></script><p>a</p>';
+		$expected = '<script><!--\nvar openHtml = "</div>";\n--></script><p>a</p>';
+
+		$this->assertEquals( $expected, $minifier->minify( $input ) );
+	}
 }

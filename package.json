@@ -1,5 +1,6 @@
 {
   "name": "advik-optimizer-assets",
+  "description": "WordPress performance and SEO plugin.",
   "version": "0.1.0",
   "scripts": {
     "build": "npx grunt release",

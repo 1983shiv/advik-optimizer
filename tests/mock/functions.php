@@ -184,6 +184,10 @@ function wp_add_inline_script( string $handle, string $data, string $position = 
 	return true;
 }
 
+function wp_enqueue_script( string $handle, string $src = '', array $deps = [], string|bool|null $ver = false, bool $in_footer = false ): void {
+	MockWP::set( '_last_enqueued_script', $handle );
+}
+
 function is_front_page(): bool {
 	return MockWP::get( 'is_front_page' ) ?? false;
 }

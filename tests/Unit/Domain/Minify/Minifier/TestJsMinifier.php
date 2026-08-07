@@ -46,4 +46,52 @@ class TestJsMinifier extends TestCase {
 
 		$this->assertEquals( $expected, $minifier->minify( $input ) );
 	}
+
+	public function testMinifyPreservesUrlInsideString(): void {
+		$minifier = new JsMinifier();
+		$input    = 'var url = "https://example.com/path?q=1";';
+		$expected = 'var url="https://example.com/path?q=1";';
+
+		$this->assertEquals( $expected, $minifier->minify( $input ) );
+	}
+
+	public function testMinifyPreservesWhitespaceInsideString(): void {
+		$minifier = new JsMinifier();
+		$input    = "var msg = 'hello world';";
+		$expected = "var msg='hello world';";
+
+		$this->assertEquals( $expected, $minifier->minify( $input ) );
+	}
+
+	public function testMinifyPreservesRegexLiteralContainingSlashes(): void {
+		$minifier = new JsMinifier();
+		$input    = 'var re = /https?:\\/\\/example\\.com\\//;';
+		$expected = 'var re=/https?:\\/\\/example\\.com\\//;';
+
+		$this->assertEquals( $expected, $minifier->minify( $input ) );
+	}
+
+	public function testMinifyTreatsSlashAfterAssignmentAsRegex(): void {
+		$minifier = new JsMinifier();
+		$input    = 'var re = /foo\\/bar/; var x = a / b;';
+		$expected = 'var re=/foo\\/bar/;var x=a/b;';
+
+		$this->assertEquals( $expected, $minifier->minify( $input ) );
+	}
+
+	public function testMinifyPreservesTemplateLiteral(): void {
+		$minifier = new JsMinifier();
+		$input    = 'var t = `http://example.com`; foo();';
+		$expected = 'var t=`http://example.com`;foo();';
+
+		$this->assertEquals( $expected, $minifier->minify( $input ) );
+	}
+
+	public function testMinifyKeepsCommentAfterWordChars(): void {
+		$minifier = new JsMinifier();
+		$input    = "var x=1; // trailing\nfoo();";
+		$expected = 'var x=1;foo();';
+
+		$this->assertEquals( $expected, $minifier->minify( $input ) );
+	}
 }

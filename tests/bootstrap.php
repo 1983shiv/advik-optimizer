@@ -21,6 +21,8 @@ define( 'OBJECT_K', 'OBJECT_K' );
 define( 'ARRAY_A', 'ARRAY_A' );
 define( 'ARRAY_N', 'ARRAY_N' );
 
+define( 'ADVIK_OPTIMIZER_VERSION', '0.1.0' );
+
 define( 'ABSPATH', $mockDir . '/' );
 
 if (! defined('WP_UNINSTALL_PLUGIN')) {
