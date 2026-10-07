@@ -27,17 +27,30 @@ class Activator {
 	public static function upgrade(): void {
 		$stored = get_option( self::VERSION_OPTION, '0.0.0' );
 
-		if ( version_compare( $stored, ADVIK_OPTIMIZER_VERSION, '>=' ) ) {
+		global $wpdb;
+
+		if ( version_compare( $stored, ADVIK_OPTIMIZER_VERSION, '<' ) ) {
+			self::upgradeCwvMetricsEnum( $wpdb );
+			self::upgradeAuditsTable( $wpdb );
+			self::upgradeCriticalCssTable( $wpdb );
+
+			update_option( self::VERSION_OPTION, ADVIK_OPTIMIZER_VERSION );
 			return;
 		}
 
-		global $wpdb;
+		// Version matches but a table can still be missing — e.g. the plugin
+		// was activated before a table was introduced without a version bump.
+		// Heal silently, at most once per day to avoid SHOW TABLES on every boot.
+		if ( function_exists( 'get_transient' ) && get_transient( 'advik_optimizer_schema_checked' ) ) {
+			return;
+		}
 
-		self::upgradeCwvMetricsEnum( $wpdb );
 		self::upgradeAuditsTable( $wpdb );
 		self::upgradeCriticalCssTable( $wpdb );
 
-		update_option( self::VERSION_OPTION, ADVIK_OPTIMIZER_VERSION );
+		if ( function_exists( 'set_transient' ) ) {
+			set_transient( 'advik_optimizer_schema_checked', time(), DAY_IN_SECONDS );
+		}
 	}
 
 	/**

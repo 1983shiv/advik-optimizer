@@ -11,12 +11,12 @@
     "env:stop": "wp-env stop"
   },
   "devDependencies": {
-    "@wordpress/env": "^10.0.0",
+    "@wordpress/env": "^11.17.0",
     "archiver": "^8.0.0",
     "grunt": "^1.6.2",
     "grunt-checktextdomain": "^1.0.1",
     "grunt-contrib-clean": "^2.0.1",
-    "grunt-contrib-compress": "^2.0.0",
+    "grunt-contrib-compress": "^1.6.0",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-cssmin": "^5.0.0",
     "grunt-contrib-uglify": "^5.2.2",
